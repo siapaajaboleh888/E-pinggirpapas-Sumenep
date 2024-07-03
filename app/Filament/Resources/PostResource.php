@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
+use Filament\Tables\Actions\ActionGroup;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
 use Filament\Forms;
@@ -18,6 +19,7 @@ class PostResource extends Resource
     protected static ?string $model = Post::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Menagement Blog';
 
     public static function form(Form $form): Form
     {
@@ -25,48 +27,73 @@ class PostResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->required()
-                    ->maxLength(2048)
-                    // ->reactive()
-                    // ->afterStateUpdated(function (Closure $set, $state) {
-                    //     $set('slug', Str::slug($state));
-                    // })
-                    ,
+                    ->maxLength(2048),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(2048),
-                Forms\Components\TextInput::make('thumbnail')
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->required(),
+                Forms\Components\Textarea::make('thumbnail')
                     ->required()
                     ->maxLength(2048),
-                Forms\Components\Textarea::make('body')
+                Forms\Components\RichEditor::make('body')
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ])
+                    ->label('Text')
                     ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('poblished_at')
-                    ->required(),
+                    ->maxLength(65535)
+                    ->hint('Translatable')
+                    ->hintColor('primary'),
+                // Forms\Components\Toggle::make('active')
+                //     ->required(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required(),
-            ]);
+                Forms\Components\DateTimePicker::make('published_at')
+                    ->required(),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'title')
+                    ->required(),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('thumbnail')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('poblished_at')
-                    ->dateTime()
+                // Tables\Columns\TextColumn::make('slug')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('thumbnail')
+                //     ->searchable(),
+                // Tables\Columns\IconColumn::make('active')
+                //     ->boolean(),
+                // Tables\Columns\TextColumn::make('published_at')
+                //     ->dateTime()
+                //     ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Nama Publisher')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('category.title')
+                    ->label('Category')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -81,9 +108,11 @@ class PostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -103,9 +132,9 @@ class PostResource extends Resource
     {
         return [
             'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'view' => Pages\ViewPost::route('/{record}'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            // 'create' => Pages\CreatePost::route('/create'),
+            // 'view' => Pages\ViewPost::route('/{record}'),
+            // 'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }
 }

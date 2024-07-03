@@ -15,14 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('title', 2048);
             $table->string('slug', 2048);
+            $table->string('image', 2048);
             $table->string('thumbnail', 2048);
             $table->longText('body');
             $table->boolean('active');
-            $table->datetime('poblished_at');
+            $table->datetime('published_at');
             $table->foreignIdFor(\App\Models\User::class, 'user_id');
+            $table->foreignIdFor(\App\Models\Category::class, 'category_id');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
