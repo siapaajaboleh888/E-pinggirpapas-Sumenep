@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('image', 2048);
             $table->string('thumbnail', 2048);
             $table->longText('body');
-            $table->boolean('active');
             $table->datetime('published_at');
             $table->foreignIdFor(\App\Models\User::class, 'user_id');
             $table->foreignIdFor(\App\Models\Category::class, 'category_id');

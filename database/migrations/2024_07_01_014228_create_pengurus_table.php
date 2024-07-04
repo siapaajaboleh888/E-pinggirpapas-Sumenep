@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengurus', function (Blueprint $table) {
+        Schema::create('penguruses', function (Blueprint $table) {
             $table->id();
             $table->string('image', 2048);
             $table->string('name', 255);

@@ -34,8 +34,12 @@
       </div>
     </div>
     @endforeach
-     <a href="{{ route('home') }}"><--Kembali ke Halaman Utama</a>
   </div>
+</div>
+<div class="text-center mt-3">
+    <a href="{{ route('home') }}" class="btn btn-primary">
+        Ke Halaman Utama
+    </a>
 </div>
 
 </div>

@@ -25,9 +25,6 @@ class KulinerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->required(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(2048),
@@ -37,17 +34,20 @@ class KulinerResource extends Resource
                 Forms\Components\TextInput::make('price'),
                 // ->required()
                 // ->maxLength(2048),
+                Forms\Components\TextInput::make('nomor_hp')
+                    ->required()
+                    ->maxLength(15),
+                Forms\Components\DateTimePicker::make('published_at')
+                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
                 Forms\Components\Textarea::make('text')
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('published_at')
-                    ->required(),
-                Forms\Components\TextInput::make('nomor_hp')
-                    ->required()
-                    ->maxLength(15),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
+                Forms\Components\FileUpload::make('image')
+                    ->image()
                     ->required(),
             ]);
     }

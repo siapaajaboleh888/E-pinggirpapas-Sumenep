@@ -17,9 +17,7 @@
     <div class="row">
       <div class="col-lg-8 ftco-animate py-md-5 mt-md-5">
         <h2 class="mb-3">{{ $posts->title }}</h2>
-        <p>{!! strip_tags($posts->body) !!}</p>
-    
-       
+        <p>{!! strip_tags($posts->body) !!}</p>   
       </div> <!-- .col-md-8 -->
       <div class="col-lg-4 sidebar ftco-animate bg-light py-md-5">
         <div class="sidebar-box ftco-animate">
