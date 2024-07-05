@@ -18,7 +18,7 @@ class Keuangan extends Model
     ];
 
     protected $casts = [
-        'tanggal' => 'datetime:d-m-Y',
+        'tanggal' => 'date:d-m-Y',
     ];
 
     public static $types = [
