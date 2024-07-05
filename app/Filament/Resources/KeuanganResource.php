@@ -42,9 +42,6 @@ class KeuanganResource extends Resource
                 Forms\Components\TextInput::make('jumlah')
                     ->required()
                     ->numeric(),
-                // Forms\Components\TextInput::make('saldo_akhir')
-                //     ->required()
-                //     ->numeric(),
             ]);
     }
 

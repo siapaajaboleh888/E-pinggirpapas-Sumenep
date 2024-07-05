@@ -60,27 +60,17 @@ class KulinerResource extends Resource
                     ->circular(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('alamat')
-                //     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->numeric()
                     ->prefix('Rp. '),
-                // Tables\Columns\TextColumn::make('published_at')
-                //     ->dateTime()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('nomor_hp')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('user.name')
-                //     ->label('Nama Publisher')
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

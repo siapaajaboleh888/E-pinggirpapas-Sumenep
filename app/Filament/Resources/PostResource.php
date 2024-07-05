@@ -59,8 +59,6 @@ class PostResource extends Resource
                     ->maxLength(65535)
                     ->hint('Translatable')
                     ->hintColor('primary'),
-                // Forms\Components\Toggle::make('active')
-                //     ->required(),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->required(),
@@ -80,15 +78,6 @@ class PostResource extends Resource
                     ->circular(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('slug')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('thumbnail')
-                //     ->searchable(),
-                // Tables\Columns\IconColumn::make('active')
-                //     ->boolean(),
-                // Tables\Columns\TextColumn::make('published_at')
-                //     ->dateTime()
-                //     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Publisher')
                     ->sortable(),

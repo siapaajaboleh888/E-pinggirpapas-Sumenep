@@ -58,8 +58,6 @@ class AboutResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('text')
-                //     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()
