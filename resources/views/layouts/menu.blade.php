@@ -2,7 +2,7 @@
 		<div class="container">
 			<a class="navbar-brand" href="/">
     <img src="{{ asset('assets/images/logo.png')}}" alt="Logo" style="height: 40px;"> <!-- Contoh path yang sudah disesuaikan -->
-    <span>Desa Lembung</span>
+    <span>E-Pesisir Tour</span>
     </a>
 	@if (session('success'))
 		   <div style="background-color: #ff5900; color: #ffffff; border: 1px solid #ff5900; padding: 10px; margin-bottom: 10px;">

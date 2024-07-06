@@ -22,6 +22,8 @@ class ContactResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static ?string $navigationGroup = 'Background Wisata';
+    protected static ?string $navigationLabel = 'Contact Masuk';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {
@@ -53,6 +55,7 @@ class ContactResource extends Resource
                 Tables\Columns\TextColumn::make('subject')
                     ->searchable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

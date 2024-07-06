@@ -20,6 +20,8 @@ class KeuanganResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationGroup = 'Menagement Keuangan';
+    protected static ?string $navigationLabel = 'Keuangan';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {

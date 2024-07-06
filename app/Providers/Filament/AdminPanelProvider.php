@@ -36,7 +36,8 @@ class AdminPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
-            ->brandLogo(asset('assets/images/logo.png'))
+            ->brandName('E-Pesisir Tour')
+            // ->brandLogo(asset('assets/images/logo.png'))
             ->brandLogoHeight('3rem')
             ->favicon(asset('assets/images/logo.png'))
             ->font('Inter')

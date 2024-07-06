@@ -20,6 +20,11 @@ class KulinerResource extends Resource
     protected static ?string $navigationLabel = 'Kuliner Desa';
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
     protected static ?string $navigationGroup = 'UMKM Desa Wisata';
+    protected static ?string $recordTitleAttribute = 'title';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -72,6 +77,7 @@ class KulinerResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
