@@ -5,7 +5,7 @@
   <div class="container">
     <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
       <div class="col-md-9 ftco-animate pb-5 text-center">
-       <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Blog <i class="fa fa-chevron-right"></i></span></p>
+       <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="fa fa-chevron-right"></i></a></span> <span>Blog <i class="fa fa-chevron-right"></i></span></p>
        <h1 class="mb-0 bread">Blog</h1>
      </div>
    </div>
@@ -27,7 +27,7 @@
             </div>
           </div>
           <h3 class="heading"><a href="{{ route('blogs.show', ['id' => $blog->id]) }}">{{ $blog->title }}</a></h3>
-          <p>{{ $blog->thumbnail }}</p>
+          <p>{{ Str::limit($blog->thumbnail,94) }}</p>
           <p><a href="{{ route('blogs.show', ['id' => $blog->id]) }}" class="btn btn-primary">Read more</a></p>
         </div>
       </div>

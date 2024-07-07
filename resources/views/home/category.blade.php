@@ -28,7 +28,7 @@
             </div>
           </div>
           <h3 class="heading"><a href="#">{{ $blog->title }}</a></h3>
-          <p>{{ $blog->thumbnail }}</p>
+          <p>{{ Str::limit ($blog->thumbnail,94) }}</p>
           <p><a href="{{ route('blogs.show', ['id' => $blog->id]) }}" class="btn btn-primary">Read more</a></p>
         </div>
       </div>
