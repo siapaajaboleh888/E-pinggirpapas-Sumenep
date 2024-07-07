@@ -20,7 +20,7 @@ class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-identification';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
     protected static ?string $navigationGroup = 'Background Wisata';
     protected static ?string $navigationLabel = 'Contact Masuk';
     protected static ?string $recordTitleAttribute = 'name';

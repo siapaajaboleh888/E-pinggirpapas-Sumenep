@@ -19,7 +19,7 @@ class KeuanganResource extends Resource
     protected static ?string $model = Keuangan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
-    protected static ?string $navigationGroup = 'Menagement Keuangan';
+    protected static ?string $navigationGroup = 'Menagement Keuangan & Tiket ';
     protected static ?string $navigationLabel = 'Keuangan';
     protected static ?string $recordTitleAttribute = 'name';
 

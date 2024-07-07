@@ -15,7 +15,9 @@
 			</div>
 		</div>
 	</div>
-							
+
+@include('reservations.create')
+				
 	@include('welcome')
 						
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Helpers\HTMLPurifierHelper;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Log;
 
 
@@ -40,11 +41,5 @@ Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.ind
 Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
 Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
 
-
-
-// Route::get('/cleaner', function () {
-//     $dirtyContent = '<p>Text saya</p>';
-//     $cleanContent = HTMLPurifierHelper::clean($dirtyContent);
-//     Log::info('Cleaned content: ' . $cleanContent);
-//     return $cleanContent;
-// });
+Route::get('reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
+Route::post('reservations', [ReservationController::class, 'store'])->name('reservations.store');
