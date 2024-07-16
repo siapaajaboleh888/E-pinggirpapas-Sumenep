@@ -19,7 +19,7 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static ?string $navigationGroup = 'Menagement Blog';
+    protected static ?string $navigationGroup = 'Blog & Virtual Tour';
     protected static ?string $recordTitleAttribute = 'title';
     public static function getNavigationBadge(): ?string
     {

@@ -29,7 +29,7 @@
 							</a>
 							<div class="text p-4">
 								<span class="text">{{ $item->published_at}}</span>
-								<h3><a href="#">{{ $item->title }}</a></h3>
+								<h3><a href="{{ route('kuliner.show', ['id' => $item->id]) }}">{{ $item->title }}</a></h3>
 								<p class="location"><span class="fa fa-map-marker"></span> {{ $item->alamat }}</p>
 								<ul>
 									<li><span class="flaticon-mountains"></span>Publisher {{ $item->user->name }}</li>

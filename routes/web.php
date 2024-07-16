@@ -8,6 +8,7 @@ use App\Helpers\HTMLPurifierHelper;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
+use App\Models\Kuliner;
 use Illuminate\Support\Facades\Log;
 
 
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 */
 
 // Route::get('/show', function () {
-//     return view('home.show');
+//     return view('kuliner.show');
 // });
 
 Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
@@ -34,6 +35,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [App\Http\Controllers\AboutController::class, 'index']);
 
 Route::get('/kuliner', [KulinerController::class, 'index']);
+Route::get('/kuliner/{id}', [KulinerController::class, 'show'])->name('kuliner.show');
 
 Route::get('/blog', [BlogController::class, 'index']);
 

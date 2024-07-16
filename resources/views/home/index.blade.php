@@ -9,14 +9,16 @@
 					<h1 class="mb-4">Discover Your Favorite Place with Us</h1>
 					<p class="caps">Travel to the any corner of the world, without going around in circles</p>
 				</div>
-				<a href="https://vimeo.com/45830194" class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4">
+				@foreach ($virtual as $vir) 
+				<a href="{{ $vir->link }}" class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4">
 					<span class="fa fa-play"></span>
 				</a>
+			@endforeach
 			</div>
 		</div>
 	</div>
 
-@include('reservations.create')
+	@include('reservations.create')
 				
 	@include('welcome')
 						
@@ -38,7 +40,7 @@
 							</a>
 							<div class="text p-4">
 								<span class="text">{{ $item->published_at}}</span>
-								<h3><a href="#">{{ $item->title }}</a></h3>
+								<h3><a href="{{ route('kuliner.show', ['id' => $item->id]) }}">{{ $item->title }}</a></h3>
 								<p class="location"><span class="fa fa-map-marker"></span> {{ $item->alamat }}</p>
 								<ul>
 									<li><span class="flaticon-mountains"></span>Publisher {{ $item->user->name }}</li>

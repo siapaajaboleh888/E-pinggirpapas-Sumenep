@@ -6,7 +6,9 @@ use App\Models\About;
 use App\Models\Kuliner;
 use App\Models\Pengurus;
 use App\Models\Post;
+use App\Models\Virtual;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,7 +25,8 @@ class HomeController extends Controller
 
         // Mengambil semua data pengurus
         $penguruses = Pengurus::all();
+        $virtual = app('db')->table('virtuals')->get();
 
-        return view('home.index', compact('about', 'blogs', 'kuliners', 'penguruses'));
+        return view('home.index', compact('about', 'blogs', 'kuliners', 'penguruses', 'virtual'));
     }
 }
