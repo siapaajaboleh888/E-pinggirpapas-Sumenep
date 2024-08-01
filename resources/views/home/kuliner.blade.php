@@ -24,7 +24,7 @@
 					  @foreach($kuliner as $item)
 					<div class="col-md-4 ftco-animate">
 						<div class="project-wrap">
-							<a href="https://wa.me/{{ $item->nomor_hp }}?text={{ urlencode('Halo, saya tertarik dengan kuliner ini') }}" target="_blank" class="img" style="background-image: url({{ Storage::url($item->image) }}); position: relative; display: block;">
+							<a href="{{ route('kuliner.show', ['id' => $item->id]) }}" target="_blank" class="img" style="background-image: url({{ Storage::url($item->image) }}); position: relative; display: block;">
 								<span class="price">Rp.{{ number_format($item->price, 0, ',', '.') }}/person</span>
 							</a>
 							<div class="text p-4">

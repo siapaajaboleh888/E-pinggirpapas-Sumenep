@@ -17,12 +17,12 @@
     <div class="row">
       <div class="col-lg-8 ftco-animate py-md-5 mt-md-5">
         <h2 class="mb-3">{{ $kuli->title }} Rp.{{ number_format($kuli->price, 0, ',', '.') }}</h2>
-        <p>{!! strip_tags($kuli->text) !!} </p>   
+        <p>{!! ($kuli->text) !!} </p>   
       </div> <!-- .col-md-8 -->
       <div class="col-lg-4 sidebar ftco-animate bg-light py-md-5">
         <div class="sidebar-box ftco-animate">
              <div class="categories">
-        <h3>Contact Person</h3>
+        <h3>Contact Penjual</h3>
         <ul>
           <div class="text-center mt-3">
                 <a href="https://wa.me/{{ $kuli->nomor_hp }}?text={{ urlencode('Halo, saya tertarik dengan kuliner ini') }}" class="btn btn-primary float-left">

@@ -35,7 +35,7 @@
 													<label for="total_orang">Total Tiket</label>
 													<div class="form-field">
 														<div class="icon"><span class="fa fa-users"></span></div>
-														<input type="number" name="total_orang" class="form-control" placeholder="Total Orang" required>
+														<input type="number" name="total_orang" class="form-control" placeholder="Jumlah Tiket" required>
 													</div>
 												</div>
 											</div>
