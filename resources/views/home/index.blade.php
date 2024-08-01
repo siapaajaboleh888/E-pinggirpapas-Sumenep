@@ -157,6 +157,82 @@
 				</div>
 			</div>
 		</section>
-		
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Image Gallery</span>
+                <h2 class="mb-4">All Images</h2>
+            </div>
+        </div>
+        <div class="row d-flex">
+            @foreach ($images as $image)
+                <div class="col-md-3 d-flex ftco-animate">
+                    <div class="image-entry text-center">
+                        <div class="img-hover-zoom">
+                             <img
+                                src="{{ Storage::url($image->image) }}"
+                                alt="Image"
+                                class="img-fluid rounded" 
+                                style="width: 100%; height: auto; border-radius: 10px;"
+                                data-toggle="modal"
+                                data-target="#imageModal"
+                                data-img="{{ Storage::url($image->image) }}"  
+                            />
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+		<div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <!-- Tampilkan tombol 'Previous' -->
+                        @if ($images->onFirstPage())
+                            <li class="disabled"><span>&lt;</span></li>
+                        @else
+                            <li><a href="{{ $images->previousPageUrl() }}">&lt;</a></li>
+                        @endif
+
+                        <!-- Tampilkan halaman-halaman -->
+                        @foreach (range(1, $images->lastPage()) as $page)
+                            @if ($page == $images->currentPage())
+                                <li class="active"><span>{{ $page }}</span></li>
+                            @else
+                                <li><a href="{{ $images->url($page) }}">{{ $page }}</a></li>
+                            @endif
+                        @endforeach
+
+                        <!-- Tampilkan tombol 'Next' -->
+                        @if ($images->hasMorePages())
+                            <li><a href="{{ $images->nextPageUrl() }}">&gt;</a></li>
+                        @else
+                            <li class="disabled"><span>&gt;</span></li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .image-entry {
+        position: relative;
+        overflow: hidden;
+    }
+    .img-hover-zoom {
+        transition: transform 0.5s;
+    }
+    .image-entry:hover .img-hover-zoom {
+        transform: scale(1.1);
+    }
+</style>
+
+
+
+
+
 		@include('start')
     @endsection

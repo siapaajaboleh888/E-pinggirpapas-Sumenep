@@ -20,6 +20,10 @@ class Post extends Model
         'user_id',
         'category_id'
     ];
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 
     public function user()
     {
