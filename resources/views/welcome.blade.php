@@ -14,11 +14,11 @@
 							<div class="col-md-6">
 								<div class="row">
 							<div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
-								<div class="services services-1 color-1 d-block img" style="background-image: url({{ asset ('assets/images/services-1.jpg')}});">
+								<div class="services services-1 color-1 d-block img" style="background-image: url({{ asset ('assets/images/lm1.jpg')}});">
 									<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-paragliding"></span></div>
 									<div class="media-body">
 										<h3 class="heading mb-3">Activities</h3>
-										<p>Tempat nongkrong yang nyaman dengan indahnya pemandangan mangrove.</p>
+										<p>Belajar banyak hal tentang alam terutama pohon mangrove.</p>
 									</div>
 								</div>      
 							</div>
@@ -27,25 +27,25 @@
 									<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
 									<div class="media-body">
 										<h3 class="heading mb-3">Lokasi Jarak Wisata</h3>
-										<p>Dari pusat kota Pamekasan berjarak sekitar 14 Km.</p>
+										<p>Dari pusat kota Pamekasan (10,6 km) lewat Jl. Raya Konang Galis.</p>
 									</div>
 								</div>    
 							</div>
 							<div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
-								<div class="services services-1 color-3 d-block img" style="background-image: url({{ asset ('assets/images/services-3.jpg')}});">
+								<div class="services services-1 color-3 d-block img" style="background-image: url({{ asset ('assets/images/lm2.jpg')}});">
 									<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-tour-guide"></span></div>
 									<div class="media-body">
 										<h3 class="heading mb-3">Desa Wisata</h3>
-										<p>Wisata pohon mangrove ini di kelola oleh desa.</p>
+										<p>Menghasilkan kopi dari pohon mangrove yang dikelola oleh pengurus.</p>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
-								<div class="services services-1 color-4 d-block img" style="background-image: url({{ asset ('assets/images/services-4.jpg')}});">
+								<div class="services services-1 color-4 d-block img" style="background-image: url({{ asset ('assets/images/lm.jpg')}});">
 									<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-map"></span></div>
 									<div class="media-body">
 										<h3 class="heading mb-3">Luas Wisata</h3>
-										<p>Luas wisata pohon mangrove saat ini 12H.</p>
+										<p>Luas wisata pohon mangrove saat ini 45 hektare.</p>
 									</div>
 								</div>      
 							</div>

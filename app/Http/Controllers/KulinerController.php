@@ -11,7 +11,10 @@ class KulinerController extends Controller
 {
     public function index()
     {
-        $kuliner = Kuliner::with('user')->paginate(6);
+        $kuliner = Kuliner::with('user')
+            ->orderBy('created_at', 'desc') // Mengurutkan berdasarkan tanggal terbaru
+            ->paginate(6);
+
         return view('home.kuliner', compact('kuliner'));
     }
     public function show($id)

@@ -1,6 +1,6 @@
 @extends('layouts.home')
  @section('content')
-   <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{{ asset('assets/images/bg_1.jpg')}}');">
+   <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{{ asset('assets/images/bg.jpg')}}');">
   <div class="overlay"></div>
   <div class="container">
     <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
@@ -15,7 +15,7 @@
 		@include('welcome')
 
 
-<section class="ftco-section ftco-about img"style="background-image: url({{ asset('assets/images/bg_4.jpg')}});">
+<section class="ftco-section ftco-about img"style="background-image: url({{ asset('assets/images/lm.jpg')}});">
 			<div class="overlay"></div>
 			<div class="container py-md-5">
 				<div class="row py-md-5">
@@ -34,7 +34,7 @@
 					<div class="col-md-12 about-intro">
 						<div class="row">
 							<div class="col-md-6 d-flex align-items-stretch">
-								<div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url({{ asset('assets/images/about-1.jpg')}});">
+								<div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url({{ asset('assets/images/bgg.jpg')}});">
 								</div>
 							</div>
 							<div class="col-md-6 pl-md-5 py-5">
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/bg_1.jpg')}});">
+		<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/lm.jpg')}});">
 			<div class="overlay"></div>
 			<div class="container">
 				<div class="row justify-content-center pb-4">

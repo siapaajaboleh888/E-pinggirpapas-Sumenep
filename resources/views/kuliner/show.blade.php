@@ -25,9 +25,9 @@
         <h3>Contact Penjual</h3>
         <ul>
           <div class="text-center mt-3">
-                <a href="https://wa.me/{{ $kuli->nomor_hp }}?text={{ urlencode('Halo, saya tertarik dengan kuliner ini') }}" class="btn btn-primary float-left">
-                    <i class="fa fa-whatsapp"></i> WhatsApp
-                </a>
+               <a href="https://wa.me/{{ '62' . ltrim($kuli->nomor_hp, '0') }}?text={{ urlencode('Halo, saya tertarik dengan kuliner ini') }}" class="btn btn-primary float-left">
+    <i class="fa fa-whatsapp"></i> WhatsApp
+</a>
             </div>
         </ul>
     </div>
@@ -54,5 +54,5 @@
   </div>
 </section> <!-- .section -->	
 
- @include('start')
+ {{-- @include('start') --}}
  @endsection

@@ -1,19 +1,36 @@
 @extends('layouts.home')
  @section('content')
-<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('assets/images/bg_5.jpg')}}');">
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('assets/images/bg.jpg')}}');">
 		<div class="overlay"></div>
 		<div class="container">
 			<div class="row no-gutters slider-text js-fullheight align-items-center" data-scrollax-parent="true">
 				<div class="col-md-7 ftco-animate">
-					<span class="subheading">Welcome to Wisata Lembung</span>
-					<h1 class="mb-4">Discover Your Favorite Place with Us</h1>
-					<p class="caps">Travel to the any corner of the world, without going around in circles</p>
+					<span class="subheading">Welcome to Wisata Lembung Mangrove</span>
+					<h1 class="mb-4">Temukan Keindahan Favorit Anda Bersama Kami</h1>
+					<p class="caps">Jelajahi Setiap Sudut Mangrove Dengan Lebih Mudah</p>
 				</div>
-				@foreach ($virtual as $vir) 
-				<a href="{{ $vir->link }}" class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4">
-					<span class="fa fa-play"></span>
-				</a>
-			@endforeach
+				 @foreach ($virtual as $vir) 
+                <a href="#" class="icon-video d-flex align-items-center justify-content-center mb-4" data-toggle="modal" data-target="#virtualTourModal-{{ $loop->index }}">
+                    <span class="fa fa-play"></span>
+                </a>
+
+                <!-- Modal Bootstrap -->
+                <div class="modal fade" id="virtualTourModal-{{ $loop->index }}" tabindex="-1" role="dialog" aria-labelledby="virtualTourModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="virtualTourModalLabel">Virtual Tour</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <iframe src="{{ $vir->link }}" frameborder="0" allowfullscreen style="width: 100%; height: 450px;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
 			</div>
 		</div>
 	</div>
@@ -52,7 +69,7 @@
 			</div>
 	</section>
 		
-		<section class="ftco-section ftco-about img"style="background-image: url({{ asset('assets/images/bg_4.jpg')}});">
+		<section class="ftco-section ftco-about img"style="background-image: url({{ asset('assets/images/bg.jpg')}});">
 			<div class="overlay"></div>
 			<div class="container py-md-5">
 				<div class="row py-md-5">
@@ -71,7 +88,7 @@
 					<div class="col-md-12 about-intro">
 						<div class="row">
 							<div class="col-md-6 d-flex align-items-stretch">
-								<div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url({{ asset('assets/images/about-1.jpg')}});">
+								<div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url({{ asset('assets/images/bgg.jpg')}});">
 								</div>
 							</div>
 							<div class="col-md-6 pl-md-5 py-5">
@@ -91,7 +108,7 @@
 			</div>
 		</section>
 
-		<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/bg_1.jpg')}});">
+		<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/bg.jpg')}});">
 			<div class="overlay"></div>
 			<div class="container">
 				<div class="row justify-content-center pb-4">
@@ -112,7 +129,7 @@
 											<div class="user-img" style="background-image: url({{ Storage::url($ite->image) }})"></div>
 											<div class="pl-3">
 												<p class="name">{{ $ite->name }}</p>
-												<span class="position">Sebagai {{ $ite->jabatan }} </span>
+												<span class="position">{{ $ite->jabatan }} </span>
 												<p class="alamat">{{ $ite->alamat }}</p>
 											</div>
 										</div>

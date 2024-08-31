@@ -53,5 +53,5 @@
   </div>
 </section> <!-- .section -->	
 
- @include('start')
+ {{-- @include('start') --}}
  @endsection

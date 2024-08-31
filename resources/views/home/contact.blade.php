@@ -84,6 +84,4 @@
     </div>
   </div>
 </section>
-
-@include('start')
 @endsection
