@@ -19,17 +19,24 @@
 					<li class="nav-item"><a href="/kuliner" class="nav-link">Kuliner</a></li>
 					<li class="nav-item"><a href="/blog" class="nav-link">Blog</a></li>
 					<li class="nav-item"><a href="/contacts" class="nav-link">Contact</a></li>
-					<li class="nav-item dropdown">
+		<li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Sekolah Alam
     </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Submenu 1</a>
-        <a class="dropdown-item" href="#">Submenu 2</a>
+    <div class="dropdown-menu dropdown-menu-right shadow-lg rounded-lg p-3" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item font-weight-bold text-primary mb-2" href="/sekolah">
+            <i class="fas fa-school"></i> Profile Sekolah Alam
+        </a>
+        <a class="dropdown-item text-dark mb-2" href="/buku">
+            <i class="fas fa-book"></i> File Pembelajaran
+        </a>
         {{-- <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Submenu lainnya</a> --}}
+        <a class="dropdown-item text-muted" href="#">
+            <i class="fas fa-ellipsis-h"></i> Submenu lainnya
+        </a> --}}
     </div>
 </li>
+
 					<li class="nav-item active"><a href="/admin" class="nav-link">Login</a></li>
 				</ul>
 			</div>

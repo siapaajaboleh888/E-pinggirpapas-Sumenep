@@ -6,8 +6,10 @@ use App\Http\Controllers\KulinerController;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\HTMLPurifierHelper;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SchoolProfileController;
 use App\Models\Kuliner;
 use Illuminate\Support\Facades\Log;
 
@@ -23,9 +25,8 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-// Route::get('/show', function () {
-//     return view('kuliner.show');
-// });
+Route::get('/sekolah', [SchoolProfileController::class, 'index'])->name('school.profile');
+Route::get('/buku', [DocumentController::class, 'index'])->name('documents.index');
 
 Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
 Route::get('/category/{category}', [BlogController::class, 'category'])->name('category.blogs');

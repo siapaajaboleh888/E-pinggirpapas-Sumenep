@@ -38,7 +38,34 @@
 	@include('reservations.create')
 				
 	@include('welcome')
-						
+					
+<section class="ftco-section" style="background-color: #e9ecef; padding: 4rem 0;">
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Paket Wisata</span>
+                <h2 class="mb-4">Temukan Paket Wisata Kami</h2>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+    @foreach ($paketWisata as $paket)
+    <div class="col mb-4">
+        <div class="card custom-card">
+            <img src="{{ Storage::url($paket->gambar) }}" class="card-img-top" alt="{{ $paket->nama_paket }}">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ $paket->nama_paket }}</h5>
+                <a href="https://wa.me/{{ '62' . ltrim($paket->wa_link, '0') }}?text={{ urlencode('Halo, saya tertarik dengan paket ini') }}" class="btn btn-success">
+                    <i class="fa fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+    @endforeach
+</div>
+    </div>
+</section>
+
+
 
 <section class="ftco-section">
 			<div class="container">
@@ -251,5 +278,5 @@
 
 
 
-		@include('start')
+	@include('start')
     @endsection
