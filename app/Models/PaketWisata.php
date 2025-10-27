@@ -13,4 +13,5 @@ class PaketWisata extends Model
         'gambar',
         'wa_link',
     ];
+ protected $table = 'paket_wisata';
 }
