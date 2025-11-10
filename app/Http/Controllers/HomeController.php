@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pemesanan;  // ✅ Model yang SUDAH ADA
-use App\Models\Produk;     // ✅ Model yang SUDAH ADA
+use App\Models\Pemesanan;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +15,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // ✅ Pakai Model yang SUDAH ADA dengan safety check
         $produkUnggulan = $this->getProduks();
         $categories = $this->getCategories();
         $stats = $this->getStats();
@@ -26,6 +25,10 @@ class HomeController extends Controller
         $kulinerGaram = $this->getKuliners();
         $pengurus = $this->getPengurus();
         $paketWisata = $this->getPaketWisata();
+        $virtual = $this->getVirtualTours();
+        $kuliners = $this->getKuliners();
+        $penguruses = $this->getPengurus();
+        $images = $this->getImages();
 
         return view('welcome', compact(
             'produkUnggulan',
@@ -37,7 +40,11 @@ class HomeController extends Controller
             'blogs',
             'kulinerGaram',
             'pengurus',
-            'paketWisata'
+            'paketWisata',
+            'virtual',
+            'kuliners',
+            'penguruses',
+            'images'
         ));
     }
 
@@ -74,7 +81,7 @@ class HomeController extends Controller
         try {
             return [
                 'total_produk' => Produk::where('status', 'active')->count(),
-                'total_petambak' => 45, // Data real Desa Pinggirpapas
+                'total_petambak' => 45,
                 'area_tambak' => '40 Hektar',
                 'produksi_tahunan' => '500 Ton',
                 'total_pemesanan' => Pemesanan::count(),
@@ -115,9 +122,9 @@ class HomeController extends Controller
     private function getAbout()
     {
         try {
-            return \App\Models\About::first();
+            return \App\Models\About::all();
         } catch (\Exception $e) {
-            return null;
+            return collect();
         }
     }
 
@@ -162,6 +169,15 @@ class HomeController extends Controller
         }
     }
 
+    private function getImages()
+    {
+        try {
+            return \App\Models\Image::latest()->paginate(12);
+        } catch (\Exception $e) {
+            return collect();
+        }
+    }
+
     // ========================================
     // PUBLIC PAGES - PROGRAM KOSABANGSA
     // ========================================
@@ -192,7 +208,6 @@ class HomeController extends Controller
      */
     public function activities()
     {
-        // ✅ 6 Aktivitas Utama Petambak Garam KUGAR
         $activities = [
             [
                 'title' => 'Pembuatan Petak Tambak',
@@ -258,7 +273,6 @@ class HomeController extends Controller
      */
     public function garamFortifikasiKelor()
     {
-        // ✅ 6 Manfaat Utama GFK untuk Kesehatan
         $manfaat = [
             [
                 'icon' => '🌿',
@@ -293,7 +307,6 @@ class HomeController extends Controller
         ];
 
         try {
-            // Produk GFK yang tersedia
             $produkGFK = Produk::where(function ($query) {
                 $query->where('name', 'LIKE', '%GFK%')
                     ->orWhere('name', 'LIKE', '%fortifikasi%')
@@ -302,7 +315,6 @@ class HomeController extends Controller
                 ->where('status', 'active')
                 ->get();
 
-            // Artikel terkait GFK
             $artikelGFK = \App\Models\Post::where(function ($query) {
                 $query->where('title', 'LIKE', '%garam%')
                     ->orWhere('title', 'LIKE', '%kelor%')
@@ -325,7 +337,6 @@ class HomeController extends Controller
      */
     public function blueEconomy()
     {
-        // ✅ 4 Prinsip Blue Economy di KUGAR Pinggirpapas
         $prinsip = [
             [
                 'title' => 'Keberlanjutan Lingkungan',

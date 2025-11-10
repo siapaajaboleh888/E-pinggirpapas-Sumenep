@@ -101,12 +101,12 @@
         /* Nav Links - SPACING FIXED */
         .nav-link {
             font-weight: 500;
-            margin: 0 0.4rem; /* ✅ DIPERBESAR dari 0.15rem → 0.4rem */
-            padding: 0.5rem 0.8rem; /* ✅ DIPERBESAR dari 0.6rem → 0.8rem */
+            margin: 0 0.4rem;
+            padding: 0.5rem 0.8rem;
             font-size: 0.95rem;
             color: var(--dark) !important;
             transition: color 0.3s ease;
-            white-space: nowrap; /* ✅ PREVENT LINE BREAK */
+            white-space: nowrap;
         }
         
         .nav-link:hover {
@@ -445,7 +445,6 @@
     <!-- ========== NAVBAR - FIXED ========== -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white">
         <div class="container">
-            <!-- ✅ LOGO & JUDUL BARU -->
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="Logo E-Pinggirpapas-Sumenep">
                 <div class="brand-text">
@@ -459,7 +458,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link active" href="{{ route('home') }}">Beranda</a></li>
-                    <!-- ✅ SPACING FIXED - margin & padding diperbesar -->
                     <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk Garam</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('gfk') }}">GFK</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('activities') }}">Aktivitas</a></li>
@@ -467,7 +465,6 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
                     <li class="nav-item ms-3">
-                        <!-- ✅ BUTTON FIXED - pakai route() bukan hardcode -->
                         <a href="{{ route('pemesanan.create') }}" class="btn btn-primary-custom">
                             <i class="fas fa-shopping-cart me-2"></i>Pesan Sekarang
                         </a>
@@ -512,7 +509,8 @@
                     </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=800" alt="Petambak Garam" class="img-fluid rounded-4 shadow-lg">
+                    {{-- ✅ CHANGED: Unsplash → petambak-garam.jpg --}}
+                    <img src="{{ asset('assets/images/petambak-garam.jpg') }}" alt="Petambak Garam" class="img-fluid rounded-4 shadow-lg">
                 </div>
             </div>
         </div>
@@ -528,7 +526,7 @@
                 @forelse($produkUnggulan ?? [] as $produk)
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="product-card">
-                        <img src="{{ $produk->image ?? 'https://images.unsplash.com/photo-1560717845-968905ba5ebf?w=500' }}" alt="{{ $produk->name }}" class="product-image">
+                        <img src="{{ $produk->image ?? asset('assets/images/garam-konsumsi.jpg') }}" alt="{{ $produk->name }}" class="product-image">
                         <div class="product-body">
                             <h3 class="product-title">{{ $produk->name }}</h3>
                             <p class="text-muted">{{ Str::limit($produk->description ?? 'Garam berkualitas premium', 100) }}</p>
@@ -542,9 +540,10 @@
                     </div>
                 </div>
                 @empty
+                {{-- ✅ PLACEHOLDER dengan GAMBAR LOKAL --}}
                 <div class="col-lg-4 col-md-6" data-aos="fade-up">
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1560717845-968905ba5ebf?w=500" alt="Garam Konsumsi" class="product-image">
+                        <img src="{{ asset('assets/images/garam-konsumsi.jpg') }}" alt="Garam Konsumsi" class="product-image">
                         <div class="product-body">
                             <h3 class="product-title">Garam Konsumsi Premium</h3>
                             <p class="text-muted">Garam murni berkualitas tinggi untuk kebutuhan dapur</p>
@@ -559,7 +558,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=500" alt="Garam Fortifikasi Kelor" class="product-image">
+                        <img src="{{ asset('assets/images/garam-gfk.jpg') }}" alt="Garam Fortifikasi Kelor" class="product-image">
                         <div class="product-body">
                             <h3 class="product-title">Garam Fortifikasi Kelor (GFK)</h3>
                             <p class="text-muted">Garam + nutrisi daun kelor untuk kesehatan keluarga</p>
@@ -574,7 +573,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1582106245687-d04a8e16a2e8?w=500" alt="Garam Industri" class="product-image">
+                        <img src="{{ asset('assets/images/garam-industri.jpg') }}" alt="Garam Industri" class="product-image">
                         <div class="product-body">
                             <h3 class="product-title">Garam Industri</h3>
                             <p class="text-muted">Garam untuk kebutuhan industri dan pengolahan</p>
@@ -609,7 +608,8 @@
                 @foreach($virtualTours as $tour)
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="virtual-tour-card">
-                        <img src="{{ $tour->thumbnail ?? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=500' }}" alt="{{ $tour->title }}">
+                        {{-- ✅ CHANGED: Unsplash → petambak-garam.jpg (jika thumbnail kosong) --}}
+                        <img src="{{ $tour->thumbnail ?? asset('assets/images/petambak-garam.jpg') }}" alt="{{ $tour->title }}">
                         <div class="virtual-tour-icon">
                             <i class="fas fa-vr-cardboard"></i>
                         </div>
@@ -686,7 +686,6 @@
             <h2>Siap Mencoba Garam Berkualitas dari E-Pinggirpapas?</h2>
             <p class="lead mb-4">Dukung petambak lokal dan dapatkan garam terbaik untuk keluarga Anda</p>
             <div class="d-flex gap-3 justify-content-center flex-wrap">
-                <!-- ✅ FIXED - pakai route() -->
                 <a href="{{ route('pemesanan.create') }}" class="btn btn-light-custom btn-lg">
                     <i class="fas fa-shopping-cart me-2"></i>Pesan Sekarang
                 </a>

@@ -181,7 +181,7 @@
                     <li class="nav-item"><a class="nav-link active" href="{{ route('blue.economy') }}">Blue Economy</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
                     <li class="nav-item ms-2">
-                        <a href="/pemesanan/buat" class="btn-pesan">
+                        <a href="{{ route('pemesanan.create') }}" class="btn-pesan">
                             <i class="fas fa-shopping-cart"></i>
                             <span>Pesan</span>
                         </a>
@@ -229,7 +229,7 @@
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="fw-bold mb-4">Dampak Positif Program</h2>
                     <p class="lead mb-4">Program Blue Economy KUGAR telah memberikan manfaat nyata bagi masyarakat pesisir</p>
                     
@@ -261,7 +261,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600" 
+                    <img src="{{ asset('assets/images/blue-economy.jpg') }}" 
                          alt="Blue Economy" 
                          class="img-fluid rounded-4 shadow-lg">
                 </div>
@@ -278,7 +278,7 @@
                 @foreach($blogs as $blog)
                 <div class="col-lg-4 col-md-6">
                     <div class="card h-100 shadow-sm border-0">
-                        <img src="{{ $blog->image ?? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=400' }}" 
+                        <img src="{{ $blog->image ?? asset('assets/images/blue-economy.jpg') }}" 
                              class="card-img-top" 
                              style="height: 200px; object-fit: cover;">
                         <div class="card-body">

@@ -54,10 +54,6 @@
             font-weight: 400;
         }
         
-        /* ===================================
-           PERBAIKAN NAVBAR - JARAK KONSISTEN
-           ===================================
-        */
         .navbar-nav {
             gap: 0.25rem;
             align-items: center;
@@ -82,7 +78,6 @@
             font-weight: 500;
         }
 
-        /* Tombol Pesan Sekarang */
         .btn-pesan {
             background: linear-gradient(135deg, var(--primary), #0052A3);
             border: none;
@@ -239,7 +234,7 @@
     <section class="hero-aktivitas">
         <div class="container text-center">
             <h1 class="display-4 fw-bold mb-3">Aktivitas Petambak Garam</h1>
-            <p class="lead">6 Tahapan Proses Pembuatan Garam Berkualitas KUGAR Pinggirpapas</p>
+            <p class="lead">6 Tahapan Proses Pembuatan Garam Berkualitas KUGAR dengan Teknologi Rumah Tunnel</p>
         </div>
     </section>
 
@@ -247,39 +242,171 @@
     <section class="py-5">
         <div class="container">
             <div class="row g-4">
-                @foreach($activities as $index => $activity)
+                <!-- Tahap 1: Pembuatan Rumah Tunnel -->
                 <div class="col-lg-4 col-md-6">
-                    <div class="activity-card {{ isset($activity['highlight']) && $activity['highlight'] ? 'highlight-card' : '' }}">
-                        @if(isset($activity['highlight']) && $activity['highlight'])
-                        <div class="highlight-badge">
-                            <i class="fas fa-star me-2"></i>INOVASI GFK
-                        </div>
-                        @endif
-                        
+                    <div class="activity-card">
                         <div class="position-relative">
-                            <img src="{{ $activity['image'] ?? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=500' }}" 
-                                 alt="{{ $activity['title'] }}" 
+                            <img src="{{ asset('assets/images/pembuatan-rumah-tunnel.jpg') }}" 
+                                 alt="Pembuatan Rumah Tunnel" 
                                  class="activity-img">
                             <div class="duration-badge">
-                                <i class="far fa-clock me-2"></i>{{ $activity['duration'] }}
+                                <i class="far fa-clock me-2"></i>2-3 hari
                             </div>
                         </div>
                         
                         <div class="card-body position-relative pt-5">
                             <div class="activity-icon">
-                                <i class="{{ $activity['icon'] }}"></i>
+                                <i class="fas fa-building"></i>
                             </div>
                             
                             <div class="text-center mb-3">
-                                <span class="badge bg-primary">Tahap {{ $index + 1 }}</span>
+                                <span class="badge bg-primary">Tahap 1</span>
                             </div>
                             
-                            <h4 class="text-center fw-bold mb-3">{{ $activity['title'] }}</h4>
-                            <p class="text-muted">{{ $activity['description'] }}</p>
+                            <h4 class="text-center fw-bold mb-3">Pembuatan Rumah Tunnel</h4>
+                            <p class="text-muted">Pembangunan struktur rumah tunnel yang melindungi proses kristalisasi garam dari hujan dan kontaminasi. Rumah tunnel dilengkapi atap transparan untuk memaksimalkan panas matahari.</p>
                         </div>
                     </div>
                 </div>
-                @endforeach
+
+                <!-- Tahap 2: Pengisian Air Laut -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card">
+                        <div class="position-relative">
+                            <img src="{{ asset('assets/images/pengisian-air-laut.jpg') }}" 
+                                 alt="Pengisian Air Laut" 
+                                 class="activity-img">
+                            <div class="duration-badge">
+                                <i class="far fa-clock me-2"></i>1 hari
+                            </div>
+                        </div>
+                        
+                        <div class="card-body position-relative pt-5">
+                            <div class="activity-icon">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <span class="badge bg-primary">Tahap 2</span>
+                            </div>
+                            
+                            <h4 class="text-center fw-bold mb-3">Pengisian Air Laut</h4>
+                            <p class="text-muted">Pengisian air laut ke dalam petak-petak di rumah tunnel dengan kadar salinitas yang tepat menggunakan sistem pompa air. Air laut yang berkualitas sangat penting untuk kristal garam yang baik.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 3: Proses Kristalisasi -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card">
+                        <div class="position-relative">
+                            <img src="{{ asset('assets/images/proses-kristalisasi.jpg') }}" 
+                                 alt="Proses Kristalisasi" 
+                                 class="activity-img">
+                            <div class="duration-badge">
+                                <i class="far fa-clock me-2"></i>7-10 hari
+                            </div>
+                        </div>
+                        
+                        <div class="card-body position-relative pt-5">
+                            <div class="activity-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <span class="badge bg-primary">Tahap 3</span>
+                            </div>
+                            
+                            <h4 class="text-center fw-bold mb-3">Proses Kristalisasi</h4>
+                            <p class="text-muted">Penjemuran dan penguapan air laut secara alami dengan sinar matahari di dalam rumah tunnel hingga terbentuk kristal garam berkualitas. Proses ini memakan waktu 7-10 hari tergantung cuaca.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 4: Pemanenan Garam -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card">
+                        <div class="position-relative">
+                            <img src="{{ asset('assets/images/pemanenan-garam.jpg') }}" 
+                                 alt="Pemanenan Garam" 
+                                 class="activity-img">
+                            <div class="duration-badge">
+                                <i class="far fa-clock me-2"></i>1-2 hari
+                            </div>
+                        </div>
+                        
+                        <div class="card-body position-relative pt-5">
+                            <div class="activity-icon">
+                                <i class="fas fa-hand-holding-water"></i>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <span class="badge bg-primary">Tahap 4</span>
+                            </div>
+                            
+                            <h4 class="text-center fw-bold mb-3">Pemanenan Garam</h4>
+                            <p class="text-muted">Pengumpulan kristal garam yang sudah siap panen dari rumah tunnel. Garam dipanen dengan hati-hati menggunakan alat khusus untuk menjaga kualitas dan kebersihan kristal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 5: Fortifikasi Kelor (GFK) - HIGHLIGHT -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card highlight-card">
+                        <div class="highlight-badge">
+                            <i class="fas fa-star me-2"></i>INOVASI GFK
+                        </div>
+                        
+                        <div class="position-relative">
+                            <img src="{{ asset('assets/images/proses-gfk.jpg') }}" 
+                                 alt="Fortifikasi Kelor" 
+                                 class="activity-img">
+                            <div class="duration-badge">
+                                <i class="far fa-clock me-2"></i>1 hari
+                            </div>
+                        </div>
+                        
+                        <div class="card-body position-relative pt-5">
+                            <div class="activity-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <span class="badge bg-success">Tahap 5</span>
+                            </div>
+                            
+                            <h4 class="text-center fw-bold mb-3">Fortifikasi Kelor (GFK) - INOVASI!</h4>
+                            <p class="text-muted">Proses inovatif pencampuran garam dengan ekstrak daun kelor (Moringa oleifera) untuk menghasilkan Garam Fortifikasi Kelor (GFK) yang kaya nutrisi dan mendukung ketahanan pangan Indonesia.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tahap 6: Pengemasan & Quality Control -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card">
+                        <div class="position-relative">
+                            <img src="{{ asset('assets/images/pengemasan.jpg') }}" 
+                                 alt="Pengemasan & Quality Control" 
+                                 class="activity-img">
+                            <div class="duration-badge">
+                                <i class="far fa-clock me-2"></i>1 hari
+                            </div>
+                        </div>
+                        
+                        <div class="card-body position-relative pt-5">
+                            <div class="activity-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <span class="badge bg-primary">Tahap 6</span>
+                            </div>
+                            
+                            <h4 class="text-center fw-bold mb-3">Pengemasan & Quality Control</h4>
+                            <p class="text-muted">Proses pengemasan garam dengan standar higienis dan quality control ketat untuk memastikan produk yang sampai ke konsumen berkualitas tinggi dan aman dikonsumsi.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -296,7 +423,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="card shadow-sm border-0">
                         <div class="position-relative">
-                            <img src="{{ $tour->thumbnail ?? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=500' }}" 
+                            <img src="{{ $tour->thumbnail ?? asset('assets/images/petambak-garam.jpg') }}" 
                                  class="card-img-top" 
                                  style="height: 200px; object-fit: cover;">
                             <div class="position-absolute top-50 start-50 translate-middle">

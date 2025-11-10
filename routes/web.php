@@ -1,11 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PemesananController;
-use App\Models\Pemesanan;  // ✅ Model SUDAH ADA
-use App\Models\Produk;     // ✅ Model SUDAH ADA
+use App\Http\Controllers\ProdukController;  // ✅ TAMBAHKAN INI
+use App\Models\Category;
+use App\Models\Pemesanan;
+use App\Models\Kuliner;    // ✅ GANTI dari Produk ke Kuliner
+use App\Models\Virtual;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+
+
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage linked successfully.';
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -29,71 +40,24 @@ Route::post('/kontak', [HomeController::class, 'submitContact'])->name('contact.
 Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 
 // ===========================
-// PRODUK GARAM ROUTES
+// PRODUK GARAM ROUTES - ✅ FIXED
 // ===========================
 
 Route::prefix('produk')->name('produk.')->group(function () {
     // List produk
-    Route::get('/', function () {
-        try {
-            $produks = Produk::where('status', 'active')
-                ->latest()
-                ->paginate(12);
-            $categories = \App\Models\Category::where('status', 'active')->get();
-        } catch (\Exception $e) {
-            // Jika database kosong, buat dummy data
-            $produks = collect([
-                (object)[
-                    'id' => 1,
-                    'name' => 'Garam Konsumsi Premium',
-                    'description' => 'Garam murni berkualitas tinggi untuk kebutuhan dapur sehari-hari',
-                    'price' => 15000,
-                    'image' => 'https://images.unsplash.com/photo-1560717845-968905ba5ebf?w=500',
-                    'status' => 'active'
-                ],
-                (object)[
-                    'id' => 2,
-                    'name' => 'Garam Fortifikasi Kelor (GFK)',
-                    'description' => 'Garam bergizi dengan tambahan nutrisi daun kelor untuk kesehatan keluarga',
-                    'price' => 25000,
-                    'image' => 'https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=500',
-                    'status' => 'active'
-                ],
-                (object)[
-                    'id' => 3,
-                    'name' => 'Garam Industri',
-                    'description' => 'Garam untuk kebutuhan industri dan pengolahan skala besar',
-                    'price' => 8000,
-                    'image' => 'https://images.unsplash.com/photo-1582106245687-d04a8e16a2e8?w=500',
-                    'status' => 'active'
-                ],
-            ]);
-            $categories = collect();
-        }
+    Route::get('/', [ProdukController::class, 'index'])->name('index');
 
-        return view('produk.index', compact('produks', 'categories'));
-    })->name('index');
+    // Detail produk - ✅ PERBAIKAN UTAMA
+    Route::get('/{id}', [ProdukController::class, 'show'])->name('show');
 
-    // Detail produk
-    Route::get('/{id}', function ($id) {
-        try {
-            $produk = Produk::findOrFail($id);
-            $relatedProducts = Produk::where('id', '!=', $id)
-                ->where('status', 'active')
-                ->take(4)
-                ->get();
-        } catch (\Exception $e) {
-            abort(404, 'Produk tidak ditemukan');
-        }
-        return view('produk.show', compact('produk', 'relatedProducts'));
-    })->name('show');
+    // Debug route (hapus di production)
+    Route::get('/{id}/debug', [ProdukController::class, 'debug'])->name('debug');
 
     // Produk by kategori
     Route::get('/kategori/{slug}', function ($slug) {
         try {
-            $category = \App\Models\Category::where('slug', $slug)->firstOrFail();
-            $produks = Produk::where('category_id', $category->id)
-                ->where('status', 'active')
+            $category = Category::where('slug', $slug)->firstOrFail();
+            $produks = Kuliner::where('category_id', $category->id)
                 ->paginate(12);
         } catch (\Exception $e) {
             abort(404, 'Kategori tidak ditemukan');
@@ -125,7 +89,6 @@ Route::prefix('pemesanan')->name('pemesanan.')->group(function () {
         ]);
 
         try {
-            // ✅ Pakai Model Pemesanan yang SUDAH ADA
             $pemesanan = Pemesanan::where('nomor_pesanan', $request->nomor_pesanan)->first();
 
             if (!$pemesanan) {
@@ -151,27 +114,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard Admin
     Route::get('/dashboard', function () {
         try {
-            // ✅ Pakai Model yang SUDAH ADA
             $stats = [
                 'total_pemesanan' => Pemesanan::count(),
                 'pemesanan_pending' => Pemesanan::where('status', 'pending')->count(),
                 'pemesanan_proses' => Pemesanan::where('status', 'processing')->count(),
                 'pemesanan_selesai' => Pemesanan::where('status', 'delivered')->count(),
-                'total_produk' => Produk::count(),
-                'produk_active' => Produk::where('status', 'active')->count(),
+                'total_produk' => Kuliner::count(),
+                'produk_active' => Kuliner::count(),
                 'revenue_bulan_ini' => Pemesanan::whereMonth('created_at', now()->month)
                     ->where('status', 'delivered')
                     ->sum('total_harga'),
                 'revenue_hari_ini' => Pemesanan::whereDate('created_at', now())
                     ->where('status', 'delivered')
                     ->sum('total_harga'),
-                // Data Program Kosabangsa
                 'total_petambak' => 45,
                 'area_tambak' => '45 Hektar',
                 'produksi_target' => '500 Ton/Tahun'
             ];
 
-            // Recent orders
             $recentOrders = Pemesanan::latest()->take(10)->get();
         } catch (\Exception $e) {
             $stats = [
@@ -222,7 +182,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('produk')->name('produk.')->group(function () {
         Route::get('/', function () {
             try {
-                $produks = Produk::with('category')->latest()->paginate(15);
+                $produks = Kuliner::latest()->paginate(15);
             } catch (\Exception $e) {
                 $produks = collect();
             }
@@ -231,7 +191,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/create', function () {
             try {
-                $categories = \App\Models\Category::all();
+                $categories = Category::all();
             } catch (\Exception $e) {
                 $categories = collect();
             }
@@ -240,8 +200,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/{id}/edit', function ($id) {
             try {
-                $produk = Produk::findOrFail($id);
-                $categories = \App\Models\Category::all();
+                $produk = Kuliner::findOrFail($id);
+                $categories = Category::all();
             } catch (\Exception $e) {
                 abort(404);
             }
@@ -257,7 +217,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('virtual-tour')->name('virtual.')->group(function () {
     Route::get('/', function () {
         try {
-            $virtualTours = \App\Models\Virtual::orderBy('created_at', 'desc')->paginate(12);
+            $virtualTours = Virtual::orderBy('created_at', 'desc')->paginate(12);
         } catch (\Exception $e) {
             $virtualTours = collect();
         }
@@ -266,8 +226,8 @@ Route::prefix('virtual-tour')->name('virtual.')->group(function () {
 
     Route::get('/{id}', function ($id) {
         try {
-            $virtualTour = \App\Models\Virtual::findOrFail($id);
-            $relatedTours = \App\Models\Virtual::where('id', '!=', $id)->take(3)->get();
+            $virtualTour = Virtual::findOrFail($id);
+            $relatedTours = Virtual::where('id', '!=', $id)->take(3)->get();
         } catch (\Exception $e) {
             abort(404, 'Virtual tour tidak ditemukan');
         }
@@ -297,10 +257,9 @@ if (config('app.debug')) {
                 'name' => DB::connection()->getDatabaseName(),
             ];
 
-            // ✅ Count menggunakan Model yang SUDAH ADA
             $checks['data'] = [
                 'pemesanan' => Pemesanan::count(),
-                'produk' => Produk::count(),
+                'produk' => Kuliner::count(),
                 'pemesanan_pending' => Pemesanan::where('status', 'pending')->count(),
                 'pemesanan_selesai' => Pemesanan::where('status', 'delivered')->count(),
             ];

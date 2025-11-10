@@ -1,8 +1,8 @@
 @extends('layouts.home')
 @section('content')
 
-{{-- Hero Section --}}
-<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('assets/images/bg.jpg')}}');">
+{{-- ✅ HERO SECTION - CHANGED: bg.jpg → petambak-garam.jpg --}}
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('assets/images/petambak-garam.jpg')}}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center" data-scrollax-parent="true">
@@ -38,7 +38,6 @@
     </div>
 </div>
 
-{{-- ✅ GANTI: reservations.create → pemesanan.create --}}
 {{-- Form Pemesanan Produk Garam --}}
 @if(View::exists('pemesanan.create'))
     @include('pemesanan.create')
@@ -64,7 +63,7 @@
     @include('welcome')
 @endif
 
-{{-- ✅ DISESUAIKAN: Paket Wisata → Paket Produk Garam --}}
+{{-- Paket Produk Garam --}}
 <section class="ftco-section" style="background-color: #e9ecef; padding: 4rem 0;">
     <div class="container">
         <div class="row justify-content-center pb-4">
@@ -95,7 +94,7 @@
     </div>
 </section>
 
-{{-- ✅ DISESUAIKAN: Kuliner → Produk Garam --}}
+{{-- ✅ PRODUK GARAM UNGGULAN - GAMBAR DISESUAIKAN --}}
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center pb-4">
@@ -108,6 +107,7 @@
             @forelse($kuliners as $item)
             <div class="col-md-4 ftco-animate">
                 <div class="project-wrap">
+                    {{-- ✅ GAMBAR PRODUK dari Database (Storage) --}}
                     <a href="{{ route('produk.show', ['id' => $item->id]) }}" class="img" style="background-image: url({{ Storage::url($item->image) }}); position: relative; display: block;">
                         <span class="price">Rp {{ number_format($item->price, 0, ',', '.') }}/{{ $item->unit ?? 'kg' }}</span>
                     </a>
@@ -122,16 +122,50 @@
                 </div>
             </div>
             @empty
-            <div class="col-12 text-center">
-                <p>Belum ada produk tersedia</p>
+            {{-- ✅ PLACEHOLDER dengan GAMBAR LOKAL --}}
+            <div class="col-md-4 ftco-animate">
+                <div class="project-wrap">
+                    <a href="{{ route('produk.index') }}" class="img" style="background-image: url({{ asset('assets/images/garam-konsumsi.jpg') }}); position: relative; display: block;">
+                        <span class="price">Rp 15.000/kg</span>
+                    </a>
+                    <div class="text p-4">
+                        <span class="text">Produk Unggulan</span>
+                        <h3><a href="{{ route('produk.index') }}">Garam Konsumsi Premium</a></h3>
+                        <p class="location"><span class="fa fa-map-marker"></span> Desa Pinggirpapas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 ftco-animate">
+                <div class="project-wrap">
+                    <a href="{{ route('gfk') }}" class="img" style="background-image: url({{ asset('assets/images/garam-gfk.jpg') }}); position: relative; display: block;">
+                        <span class="price">Rp 25.000/kg</span>
+                    </a>
+                    <div class="text p-4">
+                        <span class="text">Inovasi</span>
+                        <h3><a href="{{ route('gfk') }}">Garam Fortifikasi Kelor (GFK)</a></h3>
+                        <p class="location"><span class="fa fa-map-marker"></span> Desa Pinggirpapas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 ftco-animate">
+                <div class="project-wrap">
+                    <a href="{{ route('produk.index') }}" class="img" style="background-image: url({{ asset('assets/images/garam-industri.jpg') }}); position: relative; display: block;">
+                        <span class="price">Rp 8.000/kg</span>
+                    </a>
+                    <div class="text p-4">
+                        <span class="text">Industri</span>
+                        <h3><a href="{{ route('produk.index') }}">Garam Industri</a></h3>
+                        <p class="location"><span class="fa fa-map-marker"></span> Desa Pinggirpapas</p>
+                    </div>
+                </div>
             </div>
             @endforelse
         </div>
     </div>
 </section>
 
-{{-- Video Section --}}
-<section class="ftco-section ftco-about img" style="background-image: url({{ asset('assets/images/bg.jpg')}});">
+{{-- ✅ VIDEO SECTION - CHANGED: bg.jpg → petambak-garam.jpg --}}
+<section class="ftco-section ftco-about img" style="background-image: url({{ asset('assets/images/petambak-garam.jpg')}});">
     <div class="overlay"></div>
     <div class="container py-md-5">
         <div class="row py-md-5">
@@ -151,6 +185,7 @@
             <div class="col-md-12 about-intro">
                 <div class="row">
                     <div class="col-md-6 d-flex align-items-stretch">
+                        {{-- ✅ KEEP: bgg.jpg (karena ini About image, bukan hero) --}}
                         <div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url({{ asset('assets/images/bgg.jpg')}});">
                         </div>
                     </div>
@@ -174,8 +209,8 @@
     </div>
 </section>
 
-{{-- ✅ DISESUAIKAN: Pengurus Wisata → Petambak Mitra --}}
-<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/bg.jpg')}});">
+{{-- ✅ TIM KAMI - CHANGED: bg.jpg → petambak-garam.jpg --}}
+<section class="ftco-section testimony-section bg-bottom" style="background-image: url({{ asset('assets/images/petambak-garam.jpg')}});">
     <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center pb-4">

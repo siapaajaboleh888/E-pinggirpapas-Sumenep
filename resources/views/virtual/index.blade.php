@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        :root {
+            --primary: #0066CC;
+            --secondary: #00A86B;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             padding-top: 80px;
@@ -39,7 +44,7 @@
         .brand-title {
             font-weight: 700;
             font-size: 1.1rem;
-            color: #0066CC;
+            color: var(--primary);
             margin: 0;
         }
         
@@ -49,9 +54,13 @@
             font-weight: 400;
         }
         
-        /* PERBAIKAN SPACING NAVBAR */
         .navbar-nav {
             gap: 0.25rem;
+            align-items: center;
+        }
+        
+        .nav-item {
+            margin: 0;
         }
         
         .nav-link {
@@ -61,12 +70,34 @@
         }
         
         .nav-link:hover {
-            color: #0066CC !important;
+            color: var(--primary) !important;
         }
         
         .nav-link.active {
-            color: #0066CC !important;
+            color: var(--primary) !important;
             font-weight: 500;
+        }
+        
+        .btn-pesan {
+            background: linear-gradient(135deg, var(--primary), #0052A3);
+            border: none;
+            border-radius: 50px;
+            padding: 0.4rem 1rem !important;
+            color: white !important;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        
+        .btn-pesan:hover {
+            background: linear-gradient(135deg, #0052A3, var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
         }
         
         .hero-vr {
@@ -145,6 +176,11 @@
             .nav-link {
                 padding: 0.5rem 0.75rem !important;
             }
+            
+            .btn-pesan {
+                padding: 0.35rem 0.8rem !important;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -173,8 +209,9 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
                     <li class="nav-item ms-2">
-                        <a href="{{ route('pemesanan.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-shopping-cart me-1"></i>Pesan Sekarang
+                        <a href="{{ route('pemesanan.create') }}" class="btn-pesan">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Pesan</span>
                         </a>
                     </li>
                 </ul>
@@ -201,7 +238,7 @@
                 <div class="col-lg-4 col-md-6">
                     <a href="{{ route('virtual.show', $tour->id) }}" class="text-decoration-none">
                         <div class="vr-card">
-                            <img src="{{ $tour->thumbnail ?? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600' }}" 
+                            <img src="{{ $tour->thumbnail ?? asset('assets/images/virtual-tour.jpg') }}" 
                                  alt="{{ $tour->title }}" 
                                  class="vr-img">
                             
@@ -240,7 +277,7 @@
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="fw-bold mb-4">Pengalaman Virtual Tour 360°</h2>
                     <p class="lead">Lihat langsung proses pembuatan garam di Petambak KUGAR tanpa harus datang langsung!</p>
                     
@@ -277,7 +314,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600" 
+                    <img src="{{ asset('assets/images/virtual-tour.jpg') }}" 
                          alt="Virtual Tour" 
                          class="img-fluid rounded-4 shadow">
                 </div>

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produk Garam KUGAR | Desa Pinggirpapas</title>
-    <link rel="icon" href="{{ asset('assets/images/logo.png') }}" type="image/png">
+    <title>Produk Garam | E-Pinggirpapas-Sumenep</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,40 +12,27 @@
         :root {
             --primary: #0066CC;
             --secondary: #00A86B;
-            --dark: #1A1A2E;
         }
         
         body {
             font-family: 'Poppins', sans-serif;
-            padding-top: 85px;
-            background: #f8f9fa;
+            padding-top: 80px;
         }
         
         .navbar {
             background: white !important;
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            padding: 0.75rem 0;
         }
         
-        /* ✅ FIX 1: Logo & Brand Styling */
         .navbar-brand {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--primary) !important;
-            text-decoration: none;
-        }
-        
-        .navbar-brand:hover {
-            color: var(--primary) !important;
         }
         
         .navbar-brand img {
-            height: 45px;
-            width: 45px;
-            object-fit: contain;
+            height: 50px;
+            width: auto;
         }
         
         .brand-text {
@@ -55,224 +41,149 @@
             line-height: 1.2;
         }
         
-        .brand-main {
-            font-size: 1rem;
+        .brand-title {
             font-weight: 700;
+            font-size: 1.1rem;
             color: var(--primary);
-        }
-        
-        .brand-sub {
-            font-size: 0.7rem;
-            font-weight: 400;
-            color: #6C757D;
-        }
-        
-        /* ✅ FIX 2: Navigation Spacing - LEBIH RAPAT */
-        .navbar-nav {
-            gap: 0;
-        }
-        
-        .nav-link {
             margin: 0;
-            padding: 0.5rem 0.5rem !important;
-            font-size: 0.875rem;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .navbar-nav {
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.5rem 0.75rem;
             transition: all 0.3s ease;
+            border-radius: 8px;
             white-space: nowrap;
         }
         
         .nav-link:hover {
-            color: var(--primary) !important;
+            color: var(--primary);
+            background-color: rgba(0, 102, 204, 0.1);
         }
         
         .nav-link.active {
             color: var(--primary) !important;
             font-weight: 600;
+            background-color: rgba(0, 102, 204, 0.1);
         }
-        
-        /* ✅ FIX 3: Button Pesan - LEBIH KECIL & TIDAK TERPOTONG */
-        .btn-pesan {
-            background: linear-gradient(135deg, var(--primary), #0052A3);
-            border: none;
-            border-radius: 50px;
-            padding: 0.4rem 1rem !important;
-            color: white !important;
-            font-weight: 600;
-            font-size: 0.8rem;
+
+        .nav-item .btn-primary {
             transition: all 0.3s ease;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            text-decoration: none;
         }
         
-        .btn-pesan:hover {
-            background: linear-gradient(135deg, #0052A3, var(--primary));
+        .nav-item .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
-            color: white !important;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
         }
         
-        .btn-pesan i {
-            font-size: 0.75rem;
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
         }
         
         .product-card {
-            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            background: white;
         }
         
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        .product-img {
-            width: 100%;
+        .product-image {
             height: 250px;
             object-fit: cover;
+            width: 100%;
         }
         
-        .price {
-            color: var(--secondary);
+        .price-tag {
             font-size: 1.5rem;
             font-weight: 700;
+            color: var(--secondary);
         }
         
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary), #0052A3);
-            border: none;
-            border-radius: 50px;
-            padding: 0.5rem 1.5rem;
-            color: white;
-            font-weight: 600;
+        /* ✅ IMAGE LOADING STATE */
+        .image-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
         }
         
-        .category-badge {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            background: var(--primary);
-            color: white;
-            border-radius: 50px;
-            margin: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .category-badge:hover {
-            background: var(--secondary);
-            transform: scale(1.05);
-            text-decoration: none;
-            color: white;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 991px) {
-            .navbar-brand img {
-                height: 35px;
-                width: 35px;
-            }
-            
-            .brand-main {
-                font-size: 0.85rem;
-            }
-            
-            .brand-sub {
-                font-size: 0.65rem;
-            }
-            
-            .nav-link {
-                padding: 0.4rem 0.5rem !important;
-                font-size: 0.85rem;
-            }
-            
-            .btn-pesan {
-                padding: 0.35rem 0.8rem !important;
-                font-size: 0.75rem;
-                margin-top: 0.5rem;
-            }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         
         @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            
-            .navbar {
-                padding: 0.5rem 0;
-            }
-            
             .navbar-brand img {
-                height: 32px;
-                width: 32px;
+                height: 40px;
             }
             
-            .brand-main {
-                font-size: 0.8rem;
+            .brand-title {
+                font-size: 0.9rem;
             }
             
-            .brand-sub {
-                font-size: 0.6rem;
+            .brand-subtitle {
+                font-size: 0.65rem;
             }
             
-            .btn-pesan {
-                width: 100%;
-                justify-content: center;
+            .hero-section {
+                padding: 2rem 0;
+            }
+            
+            .navbar-nav {
+                gap: 0.25rem;
+                margin-top: 1rem;
+            }
+            
+            .nav-link {
+                padding: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ✅ FIXED Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <!-- ✅ Logo + Brand -->
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="Logo E-Pinggirpapas">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="KUGAR Logo" onerror="this.style.display='none'">
                 <div class="brand-text">
-                    <span class="brand-main">E-Pinggirpapas-Sumenep</span>
-                    <span class="brand-sub">Petambak Garam KUGAR</span>
+                    <span class="brand-title">E-Pinggirpapas-Sumenep</span>
+                    <span class="brand-subtitle">Petambak Garam KUGAR</span>
                 </div>
             </a>
-            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('produk.index') }}">Produk Garam</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('gfk') }}">GFK</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('activities') }}">Aktivitas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('virtual.index') }}">Virtual Tour</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contact') }}">Kontak</a>
-                    </li>
-                    <!-- ✅ FIX: Button TIDAK pakai route() tapi pakai URL langsung -->
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('produk.index') }}">Produk Garam</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('gfk') }}">GFK</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('activities') }}">Aktivitas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('virtual.index') }}">Virtual Tour</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
                     <li class="nav-item ms-2">
-                        <a href="/pemesanan/buat" class="btn-pesan">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span>Pesan</span>
+                        <a href="{{ route('pemesanan.create') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-shopping-cart me-1"></i>Pesan Sekarang
                         </a>
                     </li>
                 </ul>
@@ -280,98 +191,163 @@
         </div>
     </nav>
 
-    <!-- Header -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-4">
-                <h1 class="display-4 fw-bold">Produk Garam KUGAR</h1>
-                <p class="lead text-muted">Garam berkualitas tinggi dari Desa Pinggirpapas</p>
-            </div>
-
-            <!-- Filter Kategori -->
-            @if($categories && $categories->count() > 0)
-            <div class="text-center">
-                <a href="{{ route('produk.index') }}" class="category-badge">Semua Produk</a>
-                @foreach($categories as $cat)
-                    <a href="{{ route('produk.category', $cat->slug ?? $cat->id) }}" class="category-badge">
-                        {{ $cat->name }}
-                    </a>
-                @endforeach
-            </div>
-            @endif
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Produk Garam Berkualitas</h1>
+            <p class="lead">Dari Petambak Tradisional Desa Pinggirpapas - Sumenep</p>
+            <p class="mb-0">Program Kosabangsa - Blue Economy & GFK Initiative</p>
         </div>
     </section>
 
-    <!-- Produk List -->
-    <section class="py-4">
+    <!-- Breadcrumb -->
+    <section class="py-3 bg-light">
         <div class="container">
-            <div class="row g-4">
-                @forelse($produks as $produk)
-                <div class="col-lg-4 col-md-6">
-                    <div class="card product-card h-100">
-                        <img src="{{ $produk->image ?? 'https://images.unsplash.com/photo-1560717845-968905ba5ebf?w=500' }}" 
-                             alt="{{ $produk->name }}" 
-                             class="product-img">
-                        <div class="card-body">
-                            @if(isset($produk->category))
-                            <span class="badge bg-primary mb-2">{{ $produk->category }}</span>
-                            @endif
-                            <h5 class="card-title fw-bold">{{ $produk->name }}</h5>
-                            <p class="text-muted">{{ Str::limit($produk->description ?? 'Garam berkualitas premium', 100) }}</p>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="price">Rp {{ number_format($produk->price ?? 0, 0, ',', '.') }}</span>
-                                <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-primary-custom btn-sm">
-                                    Detail <i class="fas fa-arrow-right ms-2"></i>
-                                </a>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active">Produk Garam</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-5">
+        <div class="container">
+            {{-- Alert Messages --}}
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if(isset($produks) && $produks->count() > 0)
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h3 class="fw-bold">Semua Produk Garam <span class="badge bg-primary">{{ $produks->total() }}</span></h3>
+                        <p class="text-muted">Pilih produk garam berkualitas dari petambak lokal</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    @foreach($produks as $produk)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card product-card border-0 shadow">
+                            {{-- ✅ SIMPLIFIED IMAGE HANDLING - USE ACCESSOR --}}
+                            <img src="{{ $produk->image_url }}" 
+                                 class="card-img-top product-image image-loading" 
+                                 alt="{{ $produk->nama }}"
+                                 loading="lazy"
+                                 onload="this.classList.remove('image-loading')"
+                                 onerror="this.src='{{ asset('assets/images/garam-default.jpg') }}'; this.classList.remove('image-loading')">
+                            
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-success mb-2 align-self-start">Garam Premium</span>
+                                <h5 class="card-title fw-bold">{{ $produk->nama }}</h5>
+                                <p class="card-text text-muted flex-grow-1">{{ Str::limit($produk->deskripsi, 100) }}</p>
+                                
+                                <div class="mb-3">
+                                    <div class="price-tag">{{ $produk->formatted_price }}</div>
+                                    <small class="text-muted">Per {{ $produk->satuan }}</small>
+                                </div>
+
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ $produk->alamat }}
+                                    </small>
+                                </div>
+                                
+                                <div class="d-grid gap-2 mt-auto">
+                                    <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-primary">
+                                        <i class="fas fa-eye me-2"></i>Lihat Detail
+                                    </a>
+                                    <a href="{{ $produk->whatsapp_link }}" 
+                                       target="_blank" 
+                                       class="btn btn-success btn-sm">
+                                        <i class="fab fa-whatsapp me-2"></i>Hubungi Penjual
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
-                @empty
-                <div class="col-12">
-                    <div class="alert alert-info text-center py-4">
-                        <i class="fas fa-info-circle me-2 fs-4"></i>
-                        <h5 class="mb-2">Belum ada produk tersedia. Segera hadir!</h5>
-                        <p class="mb-0">Kami sedang mempersiapkan produk garam terbaik untuk Anda</p>
-                    </div>
-                </div>
-                @endforelse
-            </div>
 
-            <!-- Pagination -->
-            @if(method_exists($produks, 'links'))
-            <div class="mt-4">
-                {{ $produks->links() }}
-            </div>
+                <!-- Pagination -->
+                <div class="mt-5 d-flex justify-content-center">
+                    {{ $produks->links() }}
+                </div>
+            @else
+                <div class="text-center py-5">
+                    <i class="fas fa-box-open fa-5x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">Belum Ada Produk</h3>
+                    <p class="text-muted mb-4">Produk garam akan segera ditambahkan. Silakan cek kembali nanti.</p>
+                    <a href="{{ route('home') }}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Kembali ke Beranda
+                    </a>
+                </div>
             @endif
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="py-4 bg-primary text-white">
-        <div class="container text-center">
-            <h2 class="mb-3">Tertarik Memesan Garam KUGAR?</h2>
-            <p class="lead mb-4">Hubungi kami untuk pemesanan dalam jumlah besar</p>
-            <a href="{{ route('contact') }}" class="btn btn-light btn-lg">
-                <i class="fas fa-phone me-2"></i>Hubungi Kami
-            </a>
+    <!-- Info Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold">Produk Terjamin</h5>
+                        <p class="text-muted">Garam murni dari petambak lokal dengan kualitas terjaga</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-shipping-fast fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">Pengiriman Cepat</h5>
+                        <p class="text-muted">Tersedia pengiriman ke seluruh Indonesia</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-handshake fa-3x text-info"></i>
+                        </div>
+                        <h5 class="fw-bold">Mendukung Petani</h5>
+                        <p class="text-muted">Langsung dari petambak, mendukung ekonomi lokal</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 E-Pinggirpapas-Sumenep | Petambak Garam KUGAR</p>
+            <p class="mb-0 small">Program Kosabangsa - Blue Economy & GFK Initiative</p>
+            <div class="mt-3">
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-whatsapp fa-lg"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- ✅ Script untuk memastikan link berfungsi -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Pastikan link tidak di-prevent
-            const btnPesan = document.querySelector('.btn-pesan');
-            if (btnPesan) {
-                btnPesan.addEventListener('click', function(e) {
-                    // Tidak prevent default, biarkan navigasi normal
-                    console.log('Navigating to:', this.href);
-                });
-            }
-        });
-    </script>
 </body>
 </html>
