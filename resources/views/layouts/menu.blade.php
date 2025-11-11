@@ -49,7 +49,47 @@
                     </div>
                 </li>
 
-                <li class="nav-item active"><a href="/admin" class="nav-link">Login</a></li>
+                <!-- Authentication Links -->
+                @auth
+                    <!-- User sudah login, tampilkan Dashboard & Logout -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow-lg rounded-lg p-2" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            @if(Auth::user()->role === 'admin')
+                            <a class="dropdown-item" href="{{ route('admin.auth.dashboard') }}">
+                                <i class="fas fa-crown"></i> Admin Panel
+                            </a>
+                            @endif
+                            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                <i class="fas fa-user-edit"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                @else
+                    <!-- User belum login, tampilkan Login & Register -->
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link" style="color: #fff; font-weight: 500;">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="nav-link" style="background: #007bff; color: #fff; padding: 8px 20px; border-radius: 20px; font-weight: 500; margin-left: 10px;">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>

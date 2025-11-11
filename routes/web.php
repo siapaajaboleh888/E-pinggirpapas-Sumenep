@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\ProdukController;  // ✅ TAMBAHKAN INI
+use App\Http\Controllers\ProfileController; // ✅ BREEZE: Profile Controller
 use App\Models\Category;
 use App\Models\Pemesanan;
 use App\Models\Kuliner;    // ✅ GANTI dari Produk ke Kuliner
@@ -375,6 +376,32 @@ if (config('app.debug')) {
         }
     })->name('test.db');
 }
+
+// ===========================
+// BREEZE AUTHENTICATION ROUTES
+// ===========================
+
+// Dashboard untuk authenticated users (admin & user bisa akses)
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Profile routes (dari Breeze)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin routes dengan role protection
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin-auth')->name('admin.auth.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+});
+
+// Load Breeze auth routes (login, register, password reset, etc)
+require __DIR__ . '/auth.php';
 
 // ===========================
 // FALLBACK ROUTE (404)
