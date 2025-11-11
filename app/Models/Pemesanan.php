@@ -9,11 +9,14 @@ class Pemesanan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pemesanans'; // atau 'pemesanan' sesuai database Anda
+    protected $table = 'pemesanans';
 
+    // ✅ BENAR: Tidak ada 'tanggal_pemesanan' di fillable
+    // Laravel otomatis handle created_at & updated_at
     protected $fillable = [
         'nomor_pesanan',
         'produk_id',
+        'nama_produk',
         'nama_pemesan',
         'email',
         'telepon',
@@ -23,13 +26,16 @@ class Pemesanan extends Model
         'total_harga',
         'status',
         'catatan',
-        'tanggal_pemesanan',
+        'catatan_admin',
         'tanggal_pengiriman',
     ];
 
     protected $casts = [
-        'tanggal_pemesanan' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'tanggal_pengiriman' => 'datetime',
+        'harga_satuan' => 'decimal:2',
+        'total_harga' => 'decimal:2',
     ];
 
     // ========================================
@@ -51,26 +57,43 @@ class Pemesanan extends Model
 
         static::creating(function ($model) {
             if (empty($model->nomor_pesanan)) {
-                $model->nomor_pesanan = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+                $model->nomor_pesanan = 'KGR-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
             }
 
             if (empty($model->status)) {
                 $model->status = 'pending';
             }
 
-            if (empty($model->tanggal_pemesanan)) {
-                $model->tanggal_pemesanan = now();
-            }
+            // ✅ BENAR: Tidak set tanggal_pemesanan
+            // Laravel otomatis mengisi created_at saat insert
         });
     }
 
     // ========================================
-    // SCOPES - QUERY HELPERS
+    // ACCESSOR untuk backward compatibility
+    // ========================================
+
+    /**
+     * ✅ Accessor untuk 'tanggal_pemesanan' yang return created_at
+     * Ini untuk backward compatibility jika ada view yang masih pakai $pemesanan->tanggal_pemesanan
+     */
+    public function getTanggalPemesananAttribute()
+    {
+        return $this->created_at;
+    }
+
+    // ========================================
+    // SCOPES
     // ========================================
 
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
+    }
+
+    public function scopeConfirmed($query)
+    {
+        return $query->where('status', 'confirmed');
     }
 
     public function scopeProcessing($query)
@@ -100,7 +123,10 @@ class Pemesanan extends Model
 
     public function scopeThisWeek($query)
     {
-        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        return $query->whereBetween('created_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek()
+        ]);
     }
 
     public function scopeThisMonth($query)
@@ -156,20 +182,14 @@ class Pemesanan extends Model
         return $this;
     }
 
-    public function updateStatus($status)
-    {
-        $this->update(['status' => $status]);
-        return $this;
-    }
-
     // ========================================
-    // ACCESSOR & MUTATOR
+    // HELPERS
     // ========================================
 
     public function getStatusBadgeAttribute()
     {
         $badges = [
-            'pending' => '<span class="badge bg-warning">Pending</span>',
+            'pending' => '<span class="badge bg-warning text-dark">Menunggu Konfirmasi</span>',
             'confirmed' => '<span class="badge bg-info">Dikonfirmasi</span>',
             'processing' => '<span class="badge bg-primary">Diproses</span>',
             'shipped' => '<span class="badge bg-secondary">Dikirim</span>',
@@ -177,7 +197,7 @@ class Pemesanan extends Model
             'cancelled' => '<span class="badge bg-danger">Dibatalkan</span>',
         ];
 
-        return $badges[$this->status] ?? '<span class="badge bg-secondary">' . $this->status . '</span>';
+        return $badges[$this->status] ?? '<span class="badge bg-secondary">' . ucfirst($this->status) . '</span>';
     }
 
     public function getFormattedTotalAttribute()

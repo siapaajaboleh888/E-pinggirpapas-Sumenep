@@ -26,7 +26,6 @@ class PemesananController extends Controller
 
     /**
      * Show the form for creating a new pemesanan
-     * ✅ FIXED VERSION - Selalu tampilkan form meskipun DB kosong
      */
     public function create()
     {
@@ -34,7 +33,7 @@ class PemesananController extends Controller
             // Coba ambil produk dari database
             $produks = Produk::all();
 
-            // ✅ JIKA KOSONG/ERROR, BUAT DUMMY DATA
+            // Jika kosong, buat dummy data dengan 5 produk
             if ($produks->isEmpty()) {
                 $produks = collect([
                     (object)[
@@ -54,18 +53,29 @@ class PemesananController extends Controller
                         'nama' => 'Garam Industri',
                         'harga' => 8000,
                         'deskripsi' => 'Garam untuk kebutuhan industri'
+                    ],
+                    (object)[
+                        'id' => 4,
+                        'nama' => 'Garam SPA',
+                        'harga' => 20000,
+                        'deskripsi' => 'Garam khusus spa dan kecantikan'
+                    ],
+                    (object)[
+                        'id' => 5,
+                        'nama' => 'Garam Kasar',
+                        'harga' => 10000,
+                        'deskripsi' => 'Garam kasar untuk masak tradisional'
                     ]
                 ]);
             }
 
-            // ✅ LOG untuk debugging
             Log::info('Pemesanan Create - Total Produk: ' . $produks->count());
 
             return view('pemesanan.create', compact('produks'));
         } catch (\Exception $e) {
-            // ✅ JIKA ERROR, TETAP TAMPILKAN FORM dengan dummy data
             Log::error('Error loading pemesanan form: ' . $e->getMessage());
 
+            // Fallback dummy data
             $produks = collect([
                 (object)[
                     'id' => 1,
@@ -84,6 +94,18 @@ class PemesananController extends Controller
                     'nama' => 'Garam Industri',
                     'harga' => 8000,
                     'deskripsi' => 'Garam untuk kebutuhan industri'
+                ],
+                (object)[
+                    'id' => 4,
+                    'nama' => 'Garam SPA',
+                    'harga' => 20000,
+                    'deskripsi' => 'Garam khusus spa dan kecantikan'
+                ],
+                (object)[
+                    'id' => 5,
+                    'nama' => 'Garam Kasar',
+                    'harga' => 10000,
+                    'deskripsi' => 'Garam kasar untuk masak tradisional'
                 ]
             ]);
 
@@ -129,16 +151,18 @@ class PemesananController extends Controller
                 $produk = Produk::find($validated['produk_id']);
                 $namaProduk = $produk ? $produk->nama : 'Produk #' . $validated['produk_id'];
             } catch (\Exception $e) {
-                // Jika table produk belum ada, pakai nama default
+                // Jika table produk belum ada, pakai nama default dengan 5 produk
                 $produkNames = [
                     1 => 'Garam Konsumsi Premium',
                     2 => 'Garam Fortifikasi Kelor (GFK)',
-                    3 => 'Garam Industri'
+                    3 => 'Garam Industri',
+                    4 => 'Garam SPA',
+                    5 => 'Garam Kasar'
                 ];
                 $namaProduk = $produkNames[$validated['produk_id']] ?? 'Garam KUGAR';
             }
 
-            // Buat pemesanan baru
+            // Create pemesanan
             $pemesanan = Pemesanan::create([
                 'nomor_pesanan' => $nomorPesanan,
                 'nama_pemesan' => $validated['nama_pemesan'],
@@ -152,13 +176,15 @@ class PemesananController extends Controller
                 'total_harga' => $validated['total_harga'],
                 'catatan' => $validated['catatan'] ?? null,
                 'status' => 'pending',
-                'tanggal_pemesanan' => now()
             ]);
 
             DB::commit();
 
-            // ✅ LOG untuk debugging
-            Log::info('Pemesanan created: ' . $nomorPesanan);
+            Log::info('Pemesanan created successfully: ' . $nomorPesanan, [
+                'id' => $pemesanan->id,
+                'nomor_pesanan' => $pemesanan->nomor_pesanan,
+                'total' => $pemesanan->total_harga
+            ]);
 
             // Redirect ke halaman detail pesanan
             return redirect()
@@ -167,9 +193,9 @@ class PemesananController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // ✅ LOG error
             Log::error('Error creating pemesanan: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Request data: ', $validated);
 
             return back()
                 ->withInput()

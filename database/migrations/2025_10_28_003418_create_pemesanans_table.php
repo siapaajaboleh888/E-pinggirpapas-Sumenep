@@ -18,11 +18,12 @@ return new class extends Migration
             // Nomor pesanan (unik, tidak boleh sama)
             $table->string('nomor_pesanan')->unique();
 
-            // Foreign key ke tabel produks
-            // Jika produk dihapus, pesanan ikut terhapus
-            $table->foreignId('produk_id')
-                ->constrained('produks')
-                ->onDelete('cascade');
+            // ✅ UBAH INI: Hapus foreign key constraint sementara
+            // Simpan produk_id sebagai integer biasa saja
+            $table->unsignedBigInteger('produk_id');
+
+            // ✅ Nama produk untuk backup
+            $table->string('nama_produk');
 
             // Data pemesan
             $table->string('nama_pemesan');
@@ -32,28 +33,30 @@ return new class extends Migration
 
             // Detail pesanan
             $table->integer('jumlah');
-            $table->decimal('harga_satuan', 12, 2);  // Maksimal 12 digit, 2 desimal
+            $table->decimal('harga_satuan', 12, 2);
             $table->decimal('total_harga', 12, 2);
 
             // Optional fields
-            $table->text('catatan')->nullable();  // Boleh kosong
+            $table->text('catatan')->nullable();
+            $table->text('catatan_admin')->nullable();
             $table->date('tanggal_pengiriman')->nullable();
 
             // Status pesanan
             $table->enum('status', [
-                'pending',      // Baru masuk
-                'confirmed',    // Sudah dikonfirmasi
-                'processing',   // Sedang diproses
-                'shipped',      // Sudah dikirim
-                'delivered',    // Sudah sampai
-                'cancelled'     // Dibatalkan
+                'pending',
+                'confirmed',
+                'processing',
+                'shipped',
+                'delivered',
+                'cancelled'
             ])->default('pending');
 
-            // Timestamps (created_at & updated_at) otomatis
+            // Timestamps
             $table->timestamps();
 
             // INDEX untuk mempercepat pencarian
             $table->index('nomor_pesanan');
+            $table->index('produk_id');  // ✅ Index saja, tanpa foreign key
             $table->index('status');
             $table->index('created_at');
         });

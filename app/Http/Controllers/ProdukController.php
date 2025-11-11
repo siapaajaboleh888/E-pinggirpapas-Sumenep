@@ -6,28 +6,28 @@ use App\Models\Kuliner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage; // ✅ TAMBAHKAN INI
+use Illuminate\Support\Facades\Storage; // ✅ SUDAH BENAR: Import Facade Storage
 
 class ProdukController extends Controller
 {
     /**
      * ✅ Menampilkan daftar semua produk garam
-     * OPTIMIZED: Better error handling & performance
+     * FIXED: Menggunakan scope published() yang aman
      */
     public function index()
     {
         try {
-            // Test koneksi database
+            // Test koneksi database (opsional, untuk memastikan DB terhubung)
             DB::connection()->getPdo();
 
             Log::info('ProdukController@index dipanggil');
 
-            // Ambil produk dengan pagination (12 per halaman untuk layout yang lebih baik)
-            // ✅ TEMPORARY FIX: Hilangkan scope published untuk testing
-            $produks = Kuliner::orderBy('created_at', 'desc')
+            // ✅ PRODUCTION READY: Hanya tampilkan produk yang sudah dipublish
+            $produks = Kuliner::published()
+                ->orderBy('created_at', 'desc')
                 ->paginate(12);
 
-            Log::info('Jumlah produk ditemukan: ' . $produks->total());
+            Log::info('Jumlah produk ditemukan (termasuk yang tidak dipublikasi jika scope dihilangkan): ' . $produks->total());
 
             // Jika tidak ada produk, tetap tampilkan view dengan data kosong
             if ($produks->isEmpty()) {
@@ -46,7 +46,7 @@ class ProdukController extends Controller
             $produks = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12, 1);
 
             return view('produk.index', compact('produks'))
-                ->with('error', 'Terjadi kesalahan koneksi database. Silakan hubungi administrator.');
+                ->with('error', 'Terjadi kesalahan koneksi database atau tabel produk belum siap. Silakan hubungi administrator.');
         } catch (\Exception $e) {
             Log::error('Error ProdukController@index', [
                 'error' => $e->getMessage(),
@@ -59,13 +59,13 @@ class ProdukController extends Controller
             $produks = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12, 1);
 
             return view('produk.index', compact('produks'))
-                ->with('error', 'Terjadi kesalahan saat memuat produk. Silakan coba lagi nanti.');
+                ->with('error', 'Terjadi kesalahan umum saat memuat produk. Silakan coba lagi nanti.');
         }
     }
 
     /**
      * ✅ Menampilkan detail produk garam tertentu
-     * FULLY FIXED: No more errors!
+     * FIXED: Menggunakan scope published()
      */
     public function show($id)
     {
@@ -80,8 +80,8 @@ class ProdukController extends Controller
 
             Log::info('ProdukController@show dipanggil', ['id' => $id]);
 
-            // Ambil produk berdasarkan ID
-            $produk = Kuliner::findOrFail($id);
+            // Ambil produk berdasarkan ID, hanya yang sudah dipublikasi
+            $produk = Kuliner::published()->findOrFail($id);
 
             Log::info('Produk ditemukan', [
                 'id' => $produk->id,
@@ -106,13 +106,13 @@ class ProdukController extends Controller
                 'produkLainnya' => $produkLainnya
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            Log::warning('Produk tidak ditemukan', [
+            Log::warning('Produk tidak ditemukan atau tidak dipublikasi', [
                 'id' => $id,
                 'error' => $e->getMessage()
             ]);
 
             return redirect()->route('produk.index')
-                ->with('error', 'Produk yang Anda cari tidak ditemukan');
+                ->with('error', 'Produk yang Anda cari tidak ditemukan atau belum dipublikasikan');
         } catch (\Exception $e) {
             Log::error('Error ProdukController@show', [
                 'id' => $id,
@@ -130,6 +130,9 @@ class ProdukController extends Controller
     /**
      * ✅ SEARCH FUNCTIONALITY
      * Bonus feature untuk mencari produk
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
      */
     public function search(Request $request)
     {
@@ -167,7 +170,10 @@ class ProdukController extends Controller
 
     /**
      * ✅ DEBUG METHOD (Hapus di production!)
-     * Untuk testing data produk
+     * FIXED: Error 'Undefined type Storage' di baris 202
+     * 
+     * @param int|null $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function debug($id = null)
     {
@@ -199,7 +205,8 @@ class ProdukController extends Controller
                         'image_checks' => [
                             'raw_image' => $produk->image,
                             'is_url' => filter_var($produk->image, FILTER_VALIDATE_URL),
-                            'storage_exists' => \Storage::disk('public')->exists('kuliners/' . $produk->image),
+                            // ✅ PERBAIKAN: Hapus backslash (\) karena sudah di-import di atas (use Illuminate\Support\Facades\Storage)
+                            'storage_exists' => Storage::disk('public')->exists('kuliners/' . $produk->image),
                             'public_exists' => file_exists(public_path('assets/images/' . $produk->image)),
                         ]
                     ]

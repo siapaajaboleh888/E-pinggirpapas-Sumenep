@@ -29,7 +29,7 @@
         
         .navbar-brand {
             display: flex;
-            align-items-center;
+            align-items: center;
             gap: 0.75rem;
             font-size: 1.15rem;
             font-weight: 700;
@@ -253,9 +253,9 @@
                                     </tbody>
                                     <tfoot class="table-light">
                                         <tr>
-                                            <td colspan="3" class="text-end fw-bold">TOTAL PEMBAYARAN:</td>
-                                            <td class="text-end">
-                                                <h5 class="mb-0 text-success">Rp {{ number_format($pemesanan->total_harga ?? 0, 0, ',', '.') }}</h5>
+                                            <td colspan="3" class="text-end fw-bold">TOTAL HARGA:</td>
+                                            <td class="text-end fw-bold text-success fs-5">
+                                                Rp {{ number_format($pemesanan->total_harga ?? 0, 0, ',', '.') }}
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -273,7 +273,10 @@
                         <!-- Order Timeline -->
                         <div class="mb-4">
                             <h6 class="fw-bold mb-3"><i class="fas fa-clock text-info me-2"></i>Tanggal Pemesanan</h6>
-                            <p class="mb-0">{{ $pemesanan->tanggal_pemesanan ? $pemesanan->tanggal_pemesanan->format('d F Y, H:i') : '-' }} WIB</p>
+                            {{-- ✅ PERBAIKAN: Gunakan created_at langsung --}}
+                            <p class="mb-0">
+                                {{ $pemesanan->created_at ? $pemesanan->created_at->format('d F Y, H:i') : '-' }} WIB
+                            </p>
                         </div>
 
                         <!-- Action Buttons -->
