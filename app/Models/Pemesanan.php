@@ -28,12 +28,19 @@ class Pemesanan extends Model
         'catatan',
         'catatan_admin',
         'tanggal_pengiriman',
+        // Payment fields
+        'payment_method',
+        'payment_channel',
+        'payment_status',
+        'payment_proof',
+        'paid_at',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'tanggal_pengiriman' => 'datetime',
+        'paid_at' => 'datetime',
         'harga_satuan' => 'decimal:2',
         'total_harga' => 'decimal:2',
     ];
@@ -208,5 +215,60 @@ class Pemesanan extends Model
     public function getFormattedDateAttribute()
     {
         return $this->created_at->format('d M Y H:i');
+    }
+
+    // ========================================
+    // PAYMENT HELPERS
+    // ========================================
+
+    public function getPaymentMethodNameAttribute()
+    {
+        $methods = [
+            'bank_transfer' => 'Transfer Bank',
+            'e_wallet' => 'E-Wallet',
+            'cod' => 'COD (Cash on Delivery)',
+        ];
+        return $methods[$this->payment_method] ?? '-';
+    }
+
+    public function getPaymentChannelNameAttribute()
+    {
+        $channels = [
+            'bca' => 'BCA',
+            'bni' => 'BNI',
+            'mandiri' => 'Mandiri',
+            'bri' => 'BRI',
+            'cimb' => 'CIMB Niaga',
+            'dana' => 'DANA',
+            'gopay' => 'GoPay',
+            'ovo' => 'OVO',
+            'cod' => 'COD',
+        ];
+        return $channels[$this->payment_channel] ?? '-';
+    }
+
+    public function getPaymentStatusBadgeAttribute()
+    {
+        $badges = [
+            'unpaid' => '<span class="badge bg-danger">Belum Bayar</span>',
+            'pending' => '<span class="badge bg-warning text-dark">Menunggu Verifikasi</span>',
+            'paid' => '<span class="badge bg-success">Sudah Bayar</span>',
+        ];
+        return $badges[$this->payment_status] ?? '<span class="badge bg-secondary">-</span>';
+    }
+
+    public function markAsPaid()
+    {
+        $this->update([
+            'payment_status' => 'paid',
+            'paid_at' => now()
+        ]);
+        return $this;
+    }
+
+    public function markAsPending()
+    {
+        $this->update(['payment_status' => 'pending']);
+        return $this;
     }
 }

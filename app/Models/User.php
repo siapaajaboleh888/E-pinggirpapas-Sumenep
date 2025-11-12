@@ -27,7 +27,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // ✅ TAMBAHAN: Role field
+        'role',
+        'phone',
     ];
 
     /**
@@ -48,7 +49,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'role' => 'string',
     ];
+
+    /**
+     * The "booted" method of the model.
+     * Auto-set default role to 'user' if not specified
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->role)) {
+                $user->role = 'user';
+            }
+        });
+    }
 
     // ✅ HELPER METHODS untuk check role
     public function isAdmin(): bool

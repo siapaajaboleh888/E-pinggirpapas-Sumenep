@@ -464,11 +464,52 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('virtual.index') }}">Virtual Tour</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
-                    <li class="nav-item ms-3">
-                        <a href="{{ route('pemesanan.create') }}" class="btn btn-primary-custom">
-                            <i class="fas fa-shopping-cart me-2"></i>Pesan Sekarang
-                        </a>
-                    </li>
+                    
+                    {{-- Authentication Links --}}
+                    @auth
+                        {{-- User sudah login - tampilkan dropdown --}}
+                        <li class="nav-item dropdown ms-3">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle fa-lg me-2"></i>
+                                <span>{{ Auth::user()->name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                @if(Auth::user()->isAdmin())
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.produk.index') }}"><i class="fas fa-box me-2"></i>Kelola Produk</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.pemesanan.index') }}"><i class="fas fa-clipboard-list me-2"></i>Kelola Pesanan</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('home') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('pemesanan.track.form') }}"><i class="fas fa-shopping-bag me-2"></i>Pesanan Saya</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                                @endif
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('pemesanan.create') }}" class="btn btn-primary-custom">
+                                <i class="fas fa-shopping-cart me-2"></i>Pesan Sekarang
+                            </a>
+                        </li>
+                    @else
+                        {{-- Guest - tampilkan tombol Login dan Register --}}
+                        <li class="nav-item ms-3">
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Masuk
+                            </a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('register') }}" class="btn btn-primary-custom">
+                                <i class="fas fa-user-plus me-2"></i>Daftar
+                            </a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>

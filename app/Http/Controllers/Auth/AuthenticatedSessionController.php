@@ -8,6 +8,9 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -23,21 +26,56 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $request->authenticate();
+        // Validate input
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ], [
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Format email tidak valid',
+            'password.required' => 'Password harus diisi',
+        ]);
 
-        $request->session()->regenerate();
+        // Rate limiting
+        $throttleKey = Str::lower($request->email) . '|' . $request->ip();
 
-        // ✅ REDIRECT BERDASARKAN ROLE
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            return redirect()->intended('/admin/dashboard');
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'email' => "Terlalu banyak percobaan login. Silakan coba lagi dalam {$seconds} detik."
+            ])->onlyInput('email');
         }
 
-        // Default untuk user biasa
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Attempt authentication
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            
+            // Clear rate limiter on successful login
+            RateLimiter::clear($throttleKey);
+            
+            $user = Auth::user();
+            
+            // Redirect based on role with Bahasa Indonesia messages
+            if ($user->isAdmin()) {
+                // Admin always redirect to dashboard (no intended URL)
+                return redirect()->route('admin.dashboard')
+                    ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
+            }
+            
+            // Regular user: redirect to intended URL or home as fallback
+            return redirect()->intended(route('home'))
+                ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
+        }
+
+        // Increment rate limiter
+        RateLimiter::hit($throttleKey, 60); // 60 seconds
+
+        // Failed authentication
+        return back()->withErrors([
+            'email' => 'Email atau password salah',
+        ])->onlyInput('email');
     }
 
     /**
@@ -51,6 +89,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home')
+            ->with('success', 'Anda telah berhasil logout');
     }
 }

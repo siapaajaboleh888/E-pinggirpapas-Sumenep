@@ -30,6 +30,17 @@ class PemesananController extends Controller
     public function create()
     {
         try {
+            // Auto-fill user data if authenticated
+            $defaultData = null;
+            if (auth()->check()) {
+                $user = auth()->user();
+                $defaultData = [
+                    'nama_pemesan' => $user->name,
+                    'email' => $user->email,
+                    'telepon' => $user->phone ?? '',
+                ];
+            }
+
             // Coba ambil produk dari database
             $produks = Produk::all();
 
@@ -71,7 +82,7 @@ class PemesananController extends Controller
 
             Log::info('Pemesanan Create - Total Produk: ' . $produks->count());
 
-            return view('pemesanan.create', compact('produks'));
+            return view('pemesanan.create', compact('produks', 'defaultData'));
         } catch (\Exception $e) {
             Log::error('Error loading pemesanan form: ' . $e->getMessage());
 
@@ -128,7 +139,10 @@ class PemesananController extends Controller
             'jumlah' => 'required|integer|min:1',
             'harga_satuan' => 'required|integer|min:0',
             'total_harga' => 'required|integer|min:0',
-            'catatan' => 'nullable|string|max:1000'
+            'catatan' => 'nullable|string|max:1000',
+            // Payment fields
+            'payment_method' => 'required|in:bank_transfer,e_wallet,cod',
+            'payment_channel' => 'required|string'
         ], [
             'nama_pemesan.required' => 'Nama pemesan harus diisi',
             'email.required' => 'Email harus diisi',
@@ -137,7 +151,9 @@ class PemesananController extends Controller
             'alamat_pengiriman.required' => 'Alamat pengiriman harus diisi',
             'produk_id.required' => 'Pilih produk terlebih dahulu',
             'jumlah.required' => 'Jumlah pesanan harus diisi',
-            'jumlah.min' => 'Jumlah minimal 1 kg'
+            'jumlah.min' => 'Jumlah minimal 1 kg',
+            'payment_method.required' => 'Pilih metode pembayaran',
+            'payment_channel.required' => 'Pilih channel pembayaran'
         ]);
 
         try {
@@ -176,6 +192,10 @@ class PemesananController extends Controller
                 'total_harga' => $validated['total_harga'],
                 'catatan' => $validated['catatan'] ?? null,
                 'status' => 'pending',
+                // Payment fields
+                'payment_method' => $validated['payment_method'],
+                'payment_channel' => $validated['payment_channel'],
+                'payment_status' => $validated['payment_method'] === 'cod' ? 'unpaid' : 'unpaid',
             ]);
 
             DB::commit();
@@ -332,6 +352,98 @@ class PemesananController extends Controller
      */
     public function export($format)
     {
-        return back()->with('info', 'Export feature coming soon');
+        try {
+            $pemesanans = Pemesanan::latest()->get();
+            
+            if ($format === 'excel' || $format === 'csv') {
+                $filename = 'pemesanan_' . date('Y-m-d_His') . '.' . ($format === 'excel' ? 'xlsx' : 'csv');
+                $headers = [
+                    'Content-Type' => 'text/csv',
+                    'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                ];
+
+                $callback = function() use ($pemesanans) {
+                    $file = fopen('php://output', 'w');
+                    
+                    // Header row
+                    fputcsv($file, [
+                        'No',
+                        'Nomor Pesanan',
+                        'Tanggal',
+                        'Nama Pemesan',
+                        'Email',
+                        'Telepon',
+                        'Alamat',
+                        'Produk',
+                        'Jumlah',
+                        'Harga Satuan',
+                        'Total Harga',
+                        'Status Pesanan',
+                        'Metode Pembayaran',
+                        'Channel Pembayaran',
+                        'Status Pembayaran',
+                        'Catatan'
+                    ]);
+
+                    // Data rows
+                    foreach ($pemesanans as $index => $order) {
+                        fputcsv($file, [
+                            $index + 1,
+                            $order->nomor_pesanan,
+                            $order->created_at ? $order->created_at->format('d/m/Y H:i') : '-',
+                            $order->nama_pemesan,
+                            $order->email,
+                            $order->telepon ?? '-',
+                            $order->alamat_pengiriman ?? '-',
+                            $order->nama_produk ?? 'Produk #' . $order->produk_id,
+                            $order->jumlah,
+                            $order->harga_satuan,
+                            $order->total_harga,
+                            ucfirst($order->status),
+                            $order->payment_method_name ?? '-',
+                            $order->payment_channel_name ?? '-',
+                            ucfirst($order->payment_status ?? 'unpaid'),
+                            $order->catatan ?? '-'
+                        ]);
+                    }
+
+                    fclose($file);
+                };
+
+                return response()->stream($callback, 200, $headers);
+            }
+
+            return back()->with('error', 'Format export tidak didukung');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal export data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Mark payment as paid (Admin)
+     */
+    public function markPaid($id)
+    {
+        try {
+            $pemesanan = Pemesanan::findOrFail($id);
+            $pemesanan->markAsPaid();
+            return back()->with('success', 'Pembayaran ditandai sudah lunas');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengupdate status pembayaran');
+        }
+    }
+
+    /**
+     * Mark payment as pending (Admin)
+     */
+    public function markPending($id)
+    {
+        try {
+            $pemesanan = Pemesanan::findOrFail($id);
+            $pemesanan->markAsPending();
+            return back()->with('success', 'Pembayaran ditandai menunggu verifikasi');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengupdate status pembayaran');
+        }
     }
 }

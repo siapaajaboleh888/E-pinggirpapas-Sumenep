@@ -104,6 +104,109 @@
             color: white;
         }
         
+        /* Payment Styles */
+        .nav-pills .nav-link {
+            border-radius: 10px;
+            padding: 12px 24px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .payment-option {
+            cursor: pointer;
+            display: block;
+        }
+        
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+        
+        .payment-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .payment-option input[type="radio"]:checked + .payment-card {
+            border-color: var(--primary-color);
+            background: rgba(0, 102, 204, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.2);
+        }
+        
+        .payment-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        .payment-option-large {
+            cursor: pointer;
+            display: block;
+        }
+        
+        .payment-option-large input[type="radio"] {
+            display: none;
+        }
+        
+        .payment-card-large {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option-large input[type="radio"]:checked + .payment-card-large {
+            border-color: var(--primary-color);
+            background: rgba(0, 102, 204, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.2);
+        }
+        
+        .payment-card-large:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-icon-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--secondary-color), #006d48);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             .navbar-brand img {
                 height: 35px;
@@ -296,13 +399,181 @@
                             </div>
 
                             <!-- Step 3: Catatan -->
-                            <div class="mb-4">
+                            <div class="mb-5">
                                 <div class="d-flex align-items-center mb-4">
                                     <span class="step-badge">3</span>
                                     <h4 class="mb-0">Catatan Tambahan (Opsional)</h4>
                                 </div>
                                 
                                 <textarea name="catatan" rows="3" class="form-control" placeholder="Contoh: Tolong kirim secepatnya, butuh untuk acara...">{{ old('catatan') }}</textarea>
+                            </div>
+
+                            <!-- Step 4: Metode Pembayaran -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center mb-4">
+                                    <span class="step-badge">4</span>
+                                    <h4 class="mb-0">Metode Pembayaran *</h4>
+                                </div>
+
+                                <!-- Payment Tabs -->
+                                <ul class="nav nav-pills mb-4" id="paymentTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="bank-tab" data-bs-toggle="pill" data-bs-target="#bank" type="button" role="tab">
+                                            <i class="fas fa-university me-2"></i>Transfer Bank
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="ewallet-tab" data-bs-toggle="pill" data-bs-target="#ewallet" type="button" role="tab">
+                                            <i class="fas fa-wallet me-2"></i>E-Wallet
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="cod-tab" data-bs-toggle="pill" data-bs-target="#cod" type="button" role="tab">
+                                            <i class="fas fa-money-bill-wave me-2"></i>COD
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab Content -->
+                                <div class="tab-content" id="paymentTabContent">
+                                    <!-- Bank Transfer -->
+                                    <div class="tab-pane fade show active" id="bank" role="tabpanel">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="bca" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #003d99;">
+                                                            <i class="fas fa-university"></i>
+                                                        </div>
+                                                        <div class="payment-name">BCA</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="bni" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #f57c00;">
+                                                            <i class="fas fa-university"></i>
+                                                        </div>
+                                                        <div class="payment-name">BNI</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="mandiri" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #003d79;">
+                                                            <i class="fas fa-university"></i>
+                                                        </div>
+                                                        <div class="payment-name">Mandiri</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="bri" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #0066b2;">
+                                                            <i class="fas fa-university"></i>
+                                                        </div>
+                                                        <div class="payment-name">BRI</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="cimb" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #c8102e;">
+                                                            <i class="fas fa-university"></i>
+                                                        </div>
+                                                        <div class="payment-name">CIMB Niaga</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-info mt-3">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Nomor rekening akan diberikan setelah pesanan dikonfirmasi
+                                        </div>
+                                    </div>
+
+                                    <!-- E-Wallet -->
+                                    <div class="tab-pane fade" id="ewallet" role="tabpanel">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="dana" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #118EEA;">
+                                                            <i class="fas fa-wallet"></i>
+                                                        </div>
+                                                        <div class="payment-name">DANA</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="gopay" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #00AA13;">
+                                                            <i class="fas fa-wallet"></i>
+                                                        </div>
+                                                        <div class="payment-name">GoPay</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="payment-option">
+                                                    <input type="radio" name="payment_channel" value="ovo" required>
+                                                    <div class="payment-card">
+                                                        <div class="payment-logo" style="background: #4C28BC;">
+                                                            <i class="fas fa-wallet"></i>
+                                                        </div>
+                                                        <div class="payment-name">OVO</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-info mt-3">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Nomor e-wallet akan diberikan setelah pesanan dikonfirmasi
+                                        </div>
+                                    </div>
+
+                                    <!-- COD -->
+                                    <div class="tab-pane fade" id="cod" role="tabpanel">
+                                        <label class="payment-option-large">
+                                            <input type="radio" name="payment_channel" value="cod" required>
+                                            <div class="payment-card-large">
+                                                <div class="payment-icon-large">
+                                                    <i class="fas fa-money-bill-wave"></i>
+                                                </div>
+                                                <div>
+                                                    <h5 class="mb-2">Cash on Delivery (COD)</h5>
+                                                    <p class="text-muted mb-0">Bayar saat barang diterima</p>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <div class="alert alert-warning mt-3">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <strong>Hanya tersedia untuk wilayah Sumenep</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Hidden field for payment_method -->
+                                <input type="hidden" name="payment_method" id="payment_method" value="bank_transfer">
+                                
+                                @error('payment_method')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                                @error('payment_channel')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Submit Button -->
@@ -361,10 +632,40 @@
         produkSelect.addEventListener('change', hitungTotal);
         jumlahInput.addEventListener('input', hitungTotal);
         
+        // Payment method handling
+        const paymentMethodInput = document.getElementById('payment_method');
+        const paymentTabs = document.querySelectorAll('[data-bs-toggle="pill"]');
+        const codRadio = document.querySelector('input[name="payment_channel"][value="cod"]');
+        
+        // Update payment_method when tab changes
+        paymentTabs.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function(event) {
+                const target = event.target.getAttribute('data-bs-target');
+                
+                // Uncheck all payment channels when switching tabs
+                document.querySelectorAll('input[name="payment_channel"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                if (target === '#bank') {
+                    paymentMethodInput.value = 'bank_transfer';
+                } else if (target === '#ewallet') {
+                    paymentMethodInput.value = 'e_wallet';
+                } else if (target === '#cod') {
+                    paymentMethodInput.value = 'cod';
+                    // Auto-select COD radio when tab is opened
+                    if (codRadio) {
+                        codRadio.checked = true;
+                    }
+                }
+            });
+        });
+        
         // Validasi form sebelum submit
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             const produk = produkSelect.value;
             const jumlah = jumlahInput.value;
+            const paymentChannel = document.querySelector('input[name="payment_channel"]:checked');
             
             if (!produk) {
                 e.preventDefault();
@@ -377,6 +678,14 @@
                 e.preventDefault();
                 alert('Jumlah minimal 1 kg!');
                 jumlahInput.focus();
+                return false;
+            }
+            
+            if (!paymentChannel) {
+                e.preventDefault();
+                alert('Silakan pilih metode pembayaran terlebih dahulu!');
+                // Scroll to payment section
+                document.getElementById('paymentTabs').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return false;
             }
             

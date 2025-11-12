@@ -181,11 +181,42 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('virtual.index') }}">Virtual Tour</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('blue.economy') }}">Blue Economy</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
-                    <li class="nav-item ms-2">
-                        <a href="{{ route('pemesanan.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-shopping-cart me-1"></i>Pesan Sekarang
-                        </a>
-                    </li>
+                    
+                    @auth
+                        <li class="nav-item dropdown ms-3">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle fa-lg me-2"></i>
+                                <span>{{ Auth::user()->name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ route('home') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('pemesanan.create') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-shopping-cart me-1"></i>Pesan Sekarang
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item ms-3">
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-sign-in-alt me-2"></i>Masuk
+                            </a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('register') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-user-plus me-2"></i>Daftar
+                            </a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>

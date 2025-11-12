@@ -30,23 +30,55 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        try {
+            // Validate input with Bahasa Indonesia messages
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'phone' => ['nullable', 'string', 'max:20'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ], [
+                'name.required' => 'Nama harus diisi',
+                'name.max' => 'Nama maksimal 255 karakter',
+                'email.required' => 'Email harus diisi',
+                'email.email' => 'Format email tidak valid',
+                'email.unique' => 'Email sudah terdaftar',
+                'phone.max' => 'Nomor telepon maksimal 20 karakter',
+                'password.required' => 'Password harus diisi',
+                'password.min' => 'Password minimal 8 karakter',
+                'password.confirmed' => 'Konfirmasi password tidak cocok',
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'user', // ✅ Set default role sebagai 'user'
-        ]);
+            // Check if email already exists
+            if (User::where('email', $request->email)->exists()) {
+                return back()
+                    ->withInput($request->only('name', 'email', 'phone'))
+                    ->withErrors(['email' => 'Email sudah terdaftar']);
+            }
 
-        event(new Registered($user));
+            // Create user
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'role' => 'user',
+            ]);
 
-        Auth::login($user);
+            // Trigger registered event
+            event(new Registered($user));
 
-        return redirect(RouteServiceProvider::HOME);
+            // Auto-login after registration
+            Auth::login($user);
+
+            // Redirect with success message in Bahasa Indonesia
+            return redirect()->route('home')
+                ->with('success', 'Registrasi berhasil! Selamat datang, ' . $user->name);
+
+        } catch (\Exception $e) {
+            return back()
+                ->withInput($request->only('name', 'email', 'phone'))
+                ->withErrors(['error' => 'Terjadi kesalahan saat registrasi. Silakan coba lagi.']);
+        }
     }
 }

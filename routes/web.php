@@ -45,16 +45,10 @@ Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 // ===========================
 
 Route::prefix('produk')->name('produk.')->group(function () {
-    // List produk
+    // List produk (PUBLIC - tidak perlu login)
     Route::get('/', [ProdukController::class, 'index'])->name('index');
 
-    // Detail produk - ✅ PERBAIKAN UTAMA
-    Route::get('/{id}', [ProdukController::class, 'show'])->name('show');
-
-    // Debug route (hapus di production)
-    Route::get('/{id}/debug', [ProdukController::class, 'debug'])->name('debug');
-
-    // Produk by kategori
+    // Produk by kategori (PUBLIC - tidak perlu login)
     Route::get('/kategori/{slug}', function ($slug) {
         try {
             $category = Category::where('slug', $slug)->firstOrFail();
@@ -65,23 +59,28 @@ Route::prefix('produk')->name('produk.')->group(function () {
         }
         return view('produk.category', compact('category', 'produks'));
     })->name('category');
+
+    // Detail produk - HARUS LOGIN (PROTECTED)
+    Route::middleware('auth')->get('/{id}', [ProdukController::class, 'show'])->name('show');
+
+    // Debug route (hapus di production)
+    Route::get('/{id}/debug', [ProdukController::class, 'debug'])->name('debug');
 });
 
 // ===========================
 // PEMESANAN ROUTES (e-Commerce)
 // ===========================
 
+// PEMESANAN ROUTES - Grouped properly
 Route::prefix('pemesanan')->name('pemesanan.')->group(function () {
-    // Form pemesanan baru
-    Route::get('/buat', [PemesananController::class, 'create'])->name('create');
-    Route::post('/', [PemesananController::class, 'store'])->name('store');
-
-    // Track pesanan - Form
+    // ✅ SPECIFIC ROUTES FIRST (before wildcard routes)
+    
+    // Track pesanan - Form (public)
     Route::get('/lacak', function () {
         return view('pemesanan.track');
     })->name('track.form');
 
-    // Track pesanan - Submit
+    // Track pesanan - Submit (public)
     Route::post('/lacak', function (\Illuminate\Http\Request $request) {
         $request->validate([
             'nomor_pesanan' => 'required|string'
@@ -102,9 +101,25 @@ Route::prefix('pemesanan')->name('pemesanan.')->group(function () {
         }
     })->name('track');
 
-    // Detail pesanan by nomor
+    // BUAT PESANAN - Must be BEFORE {nomor_pesanan} wildcard route!
+    Route::get('/buat', [PemesananController::class, 'create'])
+        ->middleware('auth')
+        ->name('create');
+
+    Route::post('/', [PemesananController::class, 'store'])
+        ->middleware('auth')
+        ->name('store');
+
+    // ⚠️ WILDCARD ROUTES LAST (catches everything else)
+    // Detail pesanan by nomor (public)
     Route::get('/{nomor_pesanan}', [PemesananController::class, 'show'])->name('show');
 });
+
+// ===========================
+// DEBUG ROUTES (Hapus di production)
+// ===========================
+// Route::get('/debug-pemesanan', function () { ... });
+// Route::get('/test-pemesanan-form', function () { ... });
 
 // ===========================
 // ADMIN ROUTES - Management
@@ -170,6 +185,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/{id}/selesai', [PemesananController::class, 'deliver'])->name('deliver');
         Route::post('/{id}/batal', [PemesananController::class, 'cancel'])->name('cancel');
 
+        // Payment Status Actions
+        Route::post('/{id}/mark-paid', [PemesananController::class, 'markPaid'])->name('mark.paid');
+        Route::post('/{id}/mark-pending', [PemesananController::class, 'markPending'])->name('mark.pending');
+
         // AJAX Update Status
         Route::patch('/{id}/status', [PemesananController::class, 'updateStatus'])->name('update.status');
 
@@ -208,6 +227,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             }
             return view('admin.produk.edit', compact('produk', 'categories'));
         })->name('edit');
+
+        Route::delete('/{id}', function ($id) {
+            try {
+                $produk = Kuliner::findOrFail($id);
+                $produk->delete();
+                return back()->with('success', 'Produk berhasil dihapus');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Gagal menghapus produk');
+            }
+        })->name('destroy');
     });
 });
 

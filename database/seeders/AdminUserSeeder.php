@@ -14,24 +14,33 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // ✅ Cek apakah admin sudah ada
-        if (User::where('email', 'admin@wisatalembung.com')->exists()) {
-            $this->command->info('⚠️  Admin user already exists. Skipping...');
-            return;
-        }
+        // ✅ Admin User - E-Pinggirpapas
+        User::updateOrCreate(
+            ['email' => 'admin@epinggirpapas.com'],
+            [
+                'name' => 'Admin E-Pinggirpapas',
+                'password' => Hash::make('admin123'),
+                'role' => 'admin',
+                'phone' => '081234567890',
+                'email_verified_at' => now(),
+            ]
+        );
 
-        // ✅ Buat admin default
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@wisatalembung.com',
-            'password' => Hash::make('admin123'), // ⚠️ GANTI password ini di production!
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        $this->command->info('✅ Admin user created: admin@epinggirpapas.com / admin123');
 
-        $this->command->info('✅ Admin user created successfully!');
-        $this->command->info('   Email: admin@wisatalembung.com');
-        $this->command->info('   Password: admin123');
-        $this->command->warn('   ⚠️  JANGAN LUPA GANTI PASSWORD DI PRODUCTION!');
+        // ✅ Test User
+        User::updateOrCreate(
+            ['email' => 'user@test.com'],
+            [
+                'name' => 'User Test',
+                'password' => Hash::make('user123'),
+                'role' => 'user',
+                'phone' => '081234567891',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $this->command->info('✅ Test user created: user@test.com / user123');
+        $this->command->warn('⚠️  JANGAN LUPA GANTI PASSWORD DI PRODUCTION!');
     }
 }
