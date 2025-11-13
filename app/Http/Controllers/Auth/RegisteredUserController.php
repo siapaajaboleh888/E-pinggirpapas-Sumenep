@@ -30,13 +30,12 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        try {
             // Validate input with Bahasa Indonesia messages
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'phone' => ['nullable', 'string', 'max:20'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[A-Za-z])(?=.*\d).+$/', 'confirmed'],
             ], [
                 'name.required' => 'Nama harus diisi',
                 'name.max' => 'Nama maksimal 255 karakter',
@@ -46,6 +45,7 @@ class RegisteredUserController extends Controller
                 'phone.max' => 'Nomor telepon maksimal 20 karakter',
                 'password.required' => 'Password harus diisi',
                 'password.min' => 'Password minimal 8 karakter',
+                'password.regex' => 'Password wajib kombinasi huruf dan angka.',
                 'password.confirmed' => 'Konfirmasi password tidak cocok',
             ]);
 
@@ -53,7 +53,8 @@ class RegisteredUserController extends Controller
             if (User::where('email', $request->email)->exists()) {
                 return back()
                     ->withInput($request->only('name', 'email', 'phone'))
-                    ->withErrors(['email' => 'Email sudah terdaftar']);
+                    ->withErrors(['email' => 'Email sudah terdaftar'])
+                    ->with('warning', 'Email tersebut sudah digunakan. Silakan login atau pakai email lain.');
             }
 
             // Create user
@@ -65,20 +66,29 @@ class RegisteredUserController extends Controller
                 'role' => 'user',
             ]);
 
-            // Trigger registered event
-            event(new Registered($user));
+            // DEV MODE: Auto-verify email (tanpa mengirim email)
+            $warning = null;
+            try {
+                $user->forceFill(['email_verified_at' => now()])->save();
+            } catch (\Throwable $e) {
+                // abaikan jika gagal menandai verifikasi
+            }
 
             // Auto-login after registration
             Auth::login($user);
 
-            // Redirect with success message in Bahasa Indonesia
-            return redirect()->route('home')
-                ->with('success', 'Registrasi berhasil! Selamat datang, ' . $user->name);
+            $successMsg = 'Akun berhasil dibuat. Cek email (INBOX/SPAM) untuk aktivasi. Jika belum menerima email, gunakan tombol Kirim Ulang.';
 
-        } catch (\Exception $e) {
-            return back()
-                ->withInput($request->only('name', 'email', 'phone'))
-                ->withErrors(['error' => 'Terjadi kesalahan saat registrasi. Silakan coba lagi.']);
-        }
+            // Persist success message for later (e.g., when user goes to /login manually)
+            session(['post_register_success' => $successMsg]);
+
+            $response = redirect()->route('home')
+                ->with('success', 'Registrasi berhasil. Selamat datang, ' . $user->name . '!');
+
+            if ($warning) {
+                $response->with('warning', $warning);
+            }
+
+            return $response;
     }
 }

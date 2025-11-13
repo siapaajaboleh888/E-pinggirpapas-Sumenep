@@ -18,8 +18,12 @@ class EmailVerificationNotificationController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('status', 'verification-link-sent');
+        try {
+            $request->user()->sendEmailVerificationNotification();
+            return back()->with('status', 'verification-link-sent')
+                         ->with('success', 'Tautan verifikasi telah dikirim ulang ke email Anda.');
+        } catch (\Throwable $e) {
+            return back()->with('warning', 'Gagal mengirim email verifikasi. Periksa konfigurasi email pada server atau coba beberapa saat lagi.');
+        }
     }
 }

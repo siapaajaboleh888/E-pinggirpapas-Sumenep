@@ -154,6 +154,9 @@
                             <li><a class="dropdown-item" href="{{ route('admin.pemesanan.index') }}">
                                 <i class="fas fa-shopping-cart me-2"></i>Kelola Pesanan
                             </a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.users.index') }}">
+                                <i class="fas fa-users-cog me-2"></i>Kelola User
+                            </a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
@@ -169,6 +172,8 @@
             </div>
         </div>
     </nav>
+
+    @include('layouts.flash')
 
     <!-- Main Content -->
     <div class="container-fluid py-4">

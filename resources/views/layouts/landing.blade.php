@@ -775,14 +775,14 @@
                     <h5 class="mb-3">Kontak</h5>
                     <div class="text-white-50">
                         <p><i class="fas fa-map-marker-alt me-2"></i>Desa Pinggirpapas, Sumenep<br>Jawa Timur, Indonesia</p>
-                        <p><i class="fas fa-phone me-2"></i>+62 812-3456-7890</p>
-                        <p><i class="fas fa-envelope me-2"></i>info@epinggirpapas.id</p>
+                        <p><i class="fas fa-phone me-2"></i><a href="tel:+6285334159328" class="text-white-50 text-decoration-none">+62 85334159328</a></p>
+                        <p><i class="fas fa-envelope me-2"></i><a href="mailto:kosabangsa25@gmail.com" class="text-white-50 text-decoration-none">kosabangsa25@gmail.com</a></p>
                     </div>
                 </div>
             </div>
             <hr class="bg-white opacity-25 my-4">
             <div class="text-center text-white-50">
-                <p class="mb-0">&copy; 2024 E-Pinggirpapas-Sumenep. Program Kosabangsa - Blue Economy & GFK Initiative</p>
+                <p class="mb-0">&copy; <script>document.write(new Date().getFullYear());</script> E-Pinggirpapas-Sumenep. Program Kosabangsa - Blue Economy & GFK Initiative</p>
             </div>
         </div>
     </footer>

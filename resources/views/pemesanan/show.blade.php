@@ -246,7 +246,18 @@
                                             <td>
                                                 <strong>{{ $pemesanan->nama_produk ?? 'Produk #' . $pemesanan->produk_id }}</strong>
                                             </td>
-                                            <td class="text-center">{{ $pemesanan->jumlah }} kg</td>
+                                            @php
+                                                $satuan = 'unit';
+                                                try {
+                                                    $k = \App\Models\Kuliner::find($pemesanan->produk_id);
+                                                    if ($k) { $satuan = $k->satuan ?? 'unit'; }
+                                                    else {
+                                                        $p = \App\Models\Produk::find($pemesanan->produk_id);
+                                                        if ($p) { $satuan = $p->satuan ?? 'unit'; }
+                                                    }
+                                                } catch (Exception $e) { $satuan = 'unit'; }
+                                            @endphp
+                                            <td class="text-center">{{ $pemesanan->jumlah }} {{ $satuan }}</td>
                                             <td class="text-end">Rp {{ number_format($pemesanan->harga_satuan ?? 0, 0, ',', '.') }}</td>
                                             <td class="text-end"><strong>Rp {{ number_format($pemesanan->total_harga ?? 0, 0, ',', '.') }}</strong></td>
                                         </tr>

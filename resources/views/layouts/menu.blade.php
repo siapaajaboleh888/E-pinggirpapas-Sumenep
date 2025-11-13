@@ -62,6 +62,9 @@
                                 <a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}">
                                     <i class="fas fa-tachometer-alt text-primary me-2"></i> Admin Dashboard
                                 </a>
+                                <a class="dropdown-item py-2" href="{{ route('admin.users.index') }}">
+                                    <i class="fas fa-users-cog text-danger me-2"></i> Kelola User
+                                </a>
                                 <a class="dropdown-item py-2" href="{{ route('admin.produk.index') }}">
                                     <i class="fas fa-box text-success me-2"></i> Kelola Produk
                                 </a>

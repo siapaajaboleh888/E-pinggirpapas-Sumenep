@@ -1,4 +1,22 @@
 <x-guest-layout>
+    @if (session('success'))
+        <div class="mb-4 border border-green-400 bg-green-50 p-4 text-sm text-green-800 rounded">
+            <div class="font-extrabold text-center text-green-700 mb-2">SUKSES!!!</div>
+            <div class="text-justify">{!! nl2br(e(session('success'))) !!}</div>
+        </div>
+    @endif
+    @if (session('warning'))
+        <div class="mb-4 rounded-md bg-yellow-100 p-3 text-sm text-yellow-800">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mb-4 rounded-md bg-red-100 p-3 text-sm text-red-800">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -33,6 +51,9 @@
                 </button>
             </div>
 
+            <p class="mt-2 text-xs text-gray-500">
+                Password wajib minimal 8 karakter dan berisi kombinasi huruf serta angka.
+            </p>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
@@ -82,6 +103,27 @@
                 icon.classList.add('fa-eye');
             }
         }
+
+        // Simple client-side validation for password rules
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form[action="{{ route('register') }}"]');
+            const pwd = document.getElementById('password');
+            const pwd2 = document.getElementById('password_confirmation');
+            form.addEventListener('submit', function (e) {
+                let messages = [];
+                if (pwd.value.length < 8) {
+                    messages.push('Password minimal 8 karakter.');
+                }
+                if (pwd.value !== pwd2.value) {
+                    messages.push('Konfirmasi password tidak cocok.');
+                }
+                if (messages.length > 0) {
+                    e.preventDefault();
+                    alert(messages.join('\n'));
+                }
+            });
+        });
     </script>
     @endpush
 </x-guest-layout>
+

@@ -4,29 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Produk extends Model
 {
     use HasFactory;
 
-    protected $table = 'produks'; // atau 'produk' sesuai database
+    protected $table = 'produks';
 
     protected $fillable = [
-        'name',
+        'nama',
         'slug',
-        'description',
-        'price',
-        'stock',
-        'category_id',
-        'image',
+        'deskripsi',
+        'kategori',
+        'harga',
+        'satuan',
+        'gambar',
         'status',
-        'weight',
-        'unit',
+        'stok',
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
+        'harga' => 'decimal:2',
+        'stok' => 'integer',
     ];
 
     // ========================================
@@ -35,7 +35,7 @@ class Produk extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'kategori', 'slug');
     }
 
     public function pemesanans()
@@ -49,12 +49,12 @@ class Produk extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('status', 'tersedia');
     }
 
     public function scopeInStock($query)
     {
-        return $query->where('stock', '>', 0);
+        return $query->where('stok', '>', 0);
     }
 
     // ========================================
@@ -63,14 +63,20 @@ class Produk extends Model
 
     public function getFormattedPriceAttribute()
     {
-        return 'Rp ' . number_format($this->price, 0, ',', '.');
+        return 'Rp ' . number_format($this->harga, 0, ',', '.');
     }
 
     public function getImageUrlAttribute()
     {
-        if ($this->image && file_exists(public_path($this->image))) {
-            return asset($this->image);
+        if ($this->gambar) {
+            if (Storage::disk('public')->exists($this->gambar)) {
+                return asset('storage/' . $this->gambar);
+            }
+
+            if (file_exists(public_path($this->gambar))) {
+                return asset($this->gambar);
+            }
         }
-        return asset('images/default-product.jpg');
+        return asset('assets/images/garam-default.jpg');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProdukController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\ProdukController;  // ✅ TAMBAHKAN INI
@@ -60,11 +62,15 @@ Route::prefix('produk')->name('produk.')->group(function () {
         return view('produk.category', compact('category', 'produks'));
     })->name('category');
 
-    // Detail produk - HARUS LOGIN (PROTECTED)
-    Route::middleware('auth')->get('/{id}', [ProdukController::class, 'show'])->name('show');
+    // Debug route (hapus di production) - specific before wildcard
+    Route::get('/{id}/debug', [ProdukController::class, 'debug'])
+        ->whereNumber('id')
+        ->name('debug');
 
-    // Debug route (hapus di production)
-    Route::get('/{id}/debug', [ProdukController::class, 'debug'])->name('debug');
+    // Detail produk - HARUS LOGIN (PROTECTED) - constrain to numeric id
+    Route::middleware('auth')->get('/{id}', [ProdukController::class, 'show'])
+        ->whereNumber('id')
+        ->name('show');
 });
 
 // ===========================
@@ -125,7 +131,7 @@ Route::prefix('pemesanan')->name('pemesanan.')->group(function () {
 // ADMIN ROUTES - Management
 // ===========================
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard Admin
     Route::get('/dashboard', function () {
@@ -174,70 +180,63 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // ===========================
     Route::prefix('pemesanan')->name('pemesanan.')->group(function () {
         Route::get('/', [PemesananController::class, 'index'])->name('index');
-        Route::get('/{id}/edit', [PemesananController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [PemesananController::class, 'update'])->name('update');
-        Route::delete('/{id}', [PemesananController::class, 'destroy'])->name('destroy');
+
+        // Export routes first to avoid being caught by wildcard {id}
+        Route::get('/export/{format}', [PemesananController::class, 'export'])->name('export');
+
+        // ID-based routes with numeric constraint
+        Route::get('/{id}/edit', [PemesananController::class, 'edit'])
+            ->whereNumber('id')
+            ->name('edit');
+        Route::put('/{id}', [PemesananController::class, 'update'])
+            ->whereNumber('id')
+            ->name('update');
+        Route::delete('/{id}', [PemesananController::class, 'destroy'])
+            ->whereNumber('id')
+            ->name('destroy');
 
         // Quick Status Actions
-        Route::post('/{id}/konfirmasi', [PemesananController::class, 'confirm'])->name('confirm');
-        Route::post('/{id}/proses', [PemesananController::class, 'process'])->name('process');
-        Route::post('/{id}/kirim', [PemesananController::class, 'ship'])->name('ship');
-        Route::post('/{id}/selesai', [PemesananController::class, 'deliver'])->name('deliver');
-        Route::post('/{id}/batal', [PemesananController::class, 'cancel'])->name('cancel');
+        Route::post('/{id}/konfirmasi', [PemesananController::class, 'confirm'])
+            ->whereNumber('id')
+            ->name('confirm');
+        Route::post('/{id}/proses', [PemesananController::class, 'process'])
+            ->whereNumber('id')
+            ->name('process');
+        Route::post('/{id}/kirim', [PemesananController::class, 'ship'])
+            ->whereNumber('id')
+            ->name('ship');
+        Route::post('/{id}/selesai', [PemesananController::class, 'deliver'])
+            ->whereNumber('id')
+            ->name('deliver');
+        Route::post('/{id}/batal', [PemesananController::class, 'cancel'])
+            ->whereNumber('id')
+            ->name('cancel');
 
         // Payment Status Actions
-        Route::post('/{id}/mark-paid', [PemesananController::class, 'markPaid'])->name('mark.paid');
-        Route::post('/{id}/mark-pending', [PemesananController::class, 'markPending'])->name('mark.pending');
+        Route::post('/{id}/mark-paid', [PemesananController::class, 'markPaid'])
+            ->whereNumber('id')
+            ->name('mark.paid');
+        Route::post('/{id}/mark-pending', [PemesananController::class, 'markPending'])
+            ->whereNumber('id')
+            ->name('mark.pending');
 
         // AJAX Update Status
-        Route::patch('/{id}/status', [PemesananController::class, 'updateStatus'])->name('update.status');
-
-        // Export
-        Route::get('/export/{format}', [PemesananController::class, 'export'])->name('export');
+        Route::patch('/{id}/status', [PemesananController::class, 'updateStatus'])
+            ->whereNumber('id')
+            ->name('update.status');
     });
 
     // ===========================
     // PRODUK MANAGEMENT
     // ===========================
-    Route::prefix('produk')->name('produk.')->group(function () {
-        Route::get('/', function () {
-            try {
-                $produks = Kuliner::latest()->paginate(15);
-            } catch (\Exception $e) {
-                $produks = collect();
-            }
-            return view('admin.produk.index', compact('produks'));
-        })->name('index');
+    Route::resource('produk', AdminProdukController::class)->except(['show']);
 
-        Route::get('/create', function () {
-            try {
-                $categories = Category::all();
-            } catch (\Exception $e) {
-                $categories = collect();
-            }
-            return view('admin.produk.create', compact('categories'));
-        })->name('create');
-
-        Route::get('/{id}/edit', function ($id) {
-            try {
-                $produk = Kuliner::findOrFail($id);
-                $categories = Category::all();
-            } catch (\Exception $e) {
-                abort(404);
-            }
-            return view('admin.produk.edit', compact('produk', 'categories'));
-        })->name('edit');
-
-        Route::delete('/{id}', function ($id) {
-            try {
-                $produk = Kuliner::findOrFail($id);
-                $produk->delete();
-                return back()->with('success', 'Produk berhasil dihapus');
-            } catch (\Exception $e) {
-                return back()->with('error', 'Gagal menghapus produk');
-            }
-        })->name('destroy');
-    });
+    // ===========================
+    // USER MANAGEMENT
+    // ===========================
+    Route::resource('users', AdminUserController::class)->only(['index','destroy'])->names('users');
+    Route::post('users/{id}/restore', [AdminUserController::class, 'restore'])->name('users.restore');
+    Route::delete('users/{id}/force-delete', [AdminUserController::class, 'forceDelete'])->name('users.forceDelete');
 });
 
 // ===========================
@@ -423,7 +422,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin routes dengan role protection
-Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin-auth')->name('admin.auth.')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-auth')->name('admin.auth.')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');

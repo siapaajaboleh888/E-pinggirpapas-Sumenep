@@ -2,6 +2,25 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    @if (session('success'))
+        <div class="mb-4 border border-green-400 bg-green-50 p-4 text-sm text-green-800 rounded">
+            <div class="font-extrabold text-center text-green-700 mb-2">SUKSES!!!</div>
+            <div class="text-justify">{!! nl2br(e(session('success'))) !!}</div>
+        </div>
+    @endif
+
+    @if (session('warning'))
+        <div class="mb-4 rounded-md bg-yellow-100 p-3 text-sm text-yellow-800">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mb-4 rounded-md bg-red-100 p-3 text-sm text-red-800">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -29,6 +48,9 @@
                 </button>
             </div>
 
+            <p class="mt-2 text-xs text-gray-500">
+                Gunakan password minimal 8 karakter dengan kombinasi huruf dan angka.
+            </p>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
@@ -40,16 +62,23 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+        <div class="mt-4 space-y-3">
+            <div class="text-sm text-gray-600">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="font-semibold text-indigo-600 hover:text-indigo-500">
+                    Daftar di sini
                 </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            </div>
+            <div class="flex items-center justify-end gap-3">
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
+                <x-primary-button>
+                    {{ __('Log in') }}
+                </x-primary-button>
+            </div>
         </div>
     </form>
 

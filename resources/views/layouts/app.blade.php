@@ -18,6 +18,8 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
+            @include('layouts.flash')
+
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
@@ -34,3 +36,4 @@
         </div>
     </body>
 </html>
+

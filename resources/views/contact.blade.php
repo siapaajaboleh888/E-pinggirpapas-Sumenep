@@ -209,8 +209,7 @@
                         </div>
                         <h5 class="fw-bold">Telepon</h5>
                         <p class="text-muted">
-                            <a href="tel:+6281234567890" class="text-decoration-none">+62 812-3456-7890</a><br>
-                            <a href="tel:+6281234567891" class="text-decoration-none">+62 812-3456-7891</a>
+                            <a href="tel:+6285334159328" class="text-decoration-none">+62 85334159328</a>
                         </p>
                     </div>
                 </div>
@@ -221,8 +220,7 @@
                         </div>
                         <h5 class="fw-bold">Email</h5>
                         <p class="text-muted">
-                            <a href="mailto:info@kugarpinggirpapas.id" class="text-decoration-none">info@kugarpinggirpapas.id</a><br>
-                            <a href="mailto:order@kugarpinggirpapas.id" class="text-decoration-none">order@kugarpinggirpapas.id</a>
+                            <a href="mailto:kosabangsa25@gmail.com" class="text-decoration-none">kosabangsa25@gmail.com</a>
                         </p>
                     </div>
                 </div>

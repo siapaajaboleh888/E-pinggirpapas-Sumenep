@@ -41,46 +41,45 @@ class PemesananController extends Controller
                 ];
             }
 
-            // Coba ambil produk dari database
-            $produks = Produk::all();
+            // Ambil produk dari sumber publik (Kuliner) agar sesuai halaman /produk
+            $produks = \App\Models\Kuliner::published()
+                ->latest()
+                ->get()
+                ->map(function ($k) {
+                    return (object) [
+                        'id' => $k->id,
+                        'nama' => $k->nama,
+                        'harga' => (int) $k->harga,
+                        'deskripsi' => $k->deskripsi,
+                        'satuan' => (string) ($k->satuan ?? 'unit'),
+                    ];
+                });
 
-            // Jika kosong, buat dummy data dengan 5 produk
+            // Jika kosong, fallback ke Produk admin atau dummy
             if ($produks->isEmpty()) {
-                $produks = collect([
-                    (object)[
-                        'id' => 1,
-                        'nama' => 'Garam Konsumsi Premium',
-                        'harga' => 15000,
-                        'deskripsi' => 'Garam murni berkualitas tinggi'
-                    ],
-                    (object)[
-                        'id' => 2,
-                        'nama' => 'Garam Fortifikasi Kelor (GFK)',
-                        'harga' => 25000,
-                        'deskripsi' => 'Garam + nutrisi daun kelor'
-                    ],
-                    (object)[
-                        'id' => 3,
-                        'nama' => 'Garam Industri',
-                        'harga' => 8000,
-                        'deskripsi' => 'Garam untuk kebutuhan industri'
-                    ],
-                    (object)[
-                        'id' => 4,
-                        'nama' => 'Garam SPA',
-                        'harga' => 20000,
-                        'deskripsi' => 'Garam khusus spa dan kecantikan'
-                    ],
-                    (object)[
-                        'id' => 5,
-                        'nama' => 'Garam Kasar',
-                        'harga' => 10000,
-                        'deskripsi' => 'Garam kasar untuk masak tradisional'
-                    ]
-                ]);
+                $adminProduks = Produk::all();
+                if ($adminProduks->isNotEmpty()) {
+                    $produks = $adminProduks->map(function ($p) {
+                        return (object) [
+                            'id' => $p->id,
+                            'nama' => $p->nama,
+                            'harga' => (int) $p->harga,
+                            'deskripsi' => $p->deskripsi,
+                            'satuan' => (string) ($p->satuan ?? 'unit'),
+                        ];
+                    });
+                } else {
+                    $produks = collect([
+                        (object)['id' => 1, 'nama' => 'Garam Konsumsi Premium', 'harga' => 15000, 'deskripsi' => 'Garam murni berkualitas tinggi'],
+                        (object)['id' => 2, 'nama' => 'Garam Fortifikasi Kelor (GFK)', 'harga' => 25000, 'deskripsi' => 'Garam + nutrisi daun kelor'],
+                        (object)['id' => 3, 'nama' => 'Garam Industri', 'harga' => 8000, 'deskripsi' => 'Garam untuk kebutuhan industri'],
+                        (object)['id' => 4, 'nama' => 'Garam SPA', 'harga' => 20000, 'deskripsi' => 'Garam khusus spa dan kecantikan'],
+                        (object)['id' => 5, 'nama' => 'Garam Kasar', 'harga' => 10000, 'deskripsi' => 'Garam kasar untuk masak tradisional'],
+                    ]);
+                }
             }
 
-            Log::info('Pemesanan Create - Total Produk: ' . $produks->count());
+            Log::info('Pemesanan Create - Total Produk (Kuliner/public): ' . $produks->count());
 
             return view('pemesanan.create', compact('produks', 'defaultData'));
         } catch (\Exception $e) {
@@ -88,36 +87,11 @@ class PemesananController extends Controller
 
             // Fallback dummy data
             $produks = collect([
-                (object)[
-                    'id' => 1,
-                    'nama' => 'Garam Konsumsi Premium',
-                    'harga' => 15000,
-                    'deskripsi' => 'Garam murni berkualitas tinggi'
-                ],
-                (object)[
-                    'id' => 2,
-                    'nama' => 'Garam Fortifikasi Kelor (GFK)',
-                    'harga' => 25000,
-                    'deskripsi' => 'Garam + nutrisi daun kelor'
-                ],
-                (object)[
-                    'id' => 3,
-                    'nama' => 'Garam Industri',
-                    'harga' => 8000,
-                    'deskripsi' => 'Garam untuk kebutuhan industri'
-                ],
-                (object)[
-                    'id' => 4,
-                    'nama' => 'Garam SPA',
-                    'harga' => 20000,
-                    'deskripsi' => 'Garam khusus spa dan kecantikan'
-                ],
-                (object)[
-                    'id' => 5,
-                    'nama' => 'Garam Kasar',
-                    'harga' => 10000,
-                    'deskripsi' => 'Garam kasar untuk masak tradisional'
-                ]
+                (object)['id' => 1, 'nama' => 'Garam Konsumsi Premium', 'harga' => 15000, 'deskripsi' => 'Garam murni berkualitas tinggi'],
+                (object)['id' => 2, 'nama' => 'Garam Fortifikasi Kelor (GFK)', 'harga' => 25000, 'deskripsi' => 'Garam + nutrisi daun kelor'],
+                (object)['id' => 3, 'nama' => 'Garam Industri', 'harga' => 8000, 'deskripsi' => 'Garam untuk kebutuhan industri'],
+                (object)['id' => 4, 'nama' => 'Garam SPA', 'harga' => 20000, 'deskripsi' => 'Garam khusus spa dan kecantikan'],
+                (object)['id' => 5, 'nama' => 'Garam Kasar', 'harga' => 10000, 'deskripsi' => 'Garam kasar untuk masak tradisional'],
             ]);
 
             return view('pemesanan.create', compact('produks'));
@@ -151,7 +125,7 @@ class PemesananController extends Controller
             'alamat_pengiriman.required' => 'Alamat pengiriman harus diisi',
             'produk_id.required' => 'Pilih produk terlebih dahulu',
             'jumlah.required' => 'Jumlah pesanan harus diisi',
-            'jumlah.min' => 'Jumlah minimal 1 kg',
+            'jumlah.min' => 'Jumlah minimal 1',
             'payment_method.required' => 'Pilih metode pembayaran',
             'payment_channel.required' => 'Pilih channel pembayaran'
         ]);
@@ -162,12 +136,20 @@ class PemesananController extends Controller
             // Generate nomor pesanan unik
             $nomorPesanan = 'KGR-' . date('Ymd') . '-' . strtoupper(Str::random(6));
 
-            // Cek apakah produk ada di database
+            // Tentukan nama produk berdasarkan Kuliner publik; fallback ke Produk admin atau default
+            $namaProduk = null;
             try {
-                $produk = Produk::find($validated['produk_id']);
-                $namaProduk = $produk ? $produk->nama : 'Produk #' . $validated['produk_id'];
+                $k = \App\Models\Kuliner::find($validated['produk_id']);
+                if ($k) {
+                    $namaProduk = $k->nama;
+                } else {
+                    $p = Produk::find($validated['produk_id']);
+                    $namaProduk = $p?->nama;
+                }
             } catch (\Exception $e) {
-                // Jika table produk belum ada, pakai nama default dengan 5 produk
+                // abaikan; gunakan default di bawah
+            }
+            if (!$namaProduk) {
                 $produkNames = [
                     1 => 'Garam Konsumsi Premium',
                     2 => 'Garam Fortifikasi Kelor (GFK)',
@@ -355,18 +337,23 @@ class PemesananController extends Controller
         try {
             $pemesanans = Pemesanan::latest()->get();
             
+            // Perlakukan 'excel' sebagai CSV agar kompatibel tanpa library eksternal
             if ($format === 'excel' || $format === 'csv') {
-                $filename = 'pemesanan_' . date('Y-m-d_His') . '.' . ($format === 'excel' ? 'xlsx' : 'csv');
+                $filename = 'pemesanan_' . date('Y-m-d_His') . '.csv';
                 $headers = [
-                    'Content-Type' => 'text/csv',
+                    'Content-Type' => 'text/csv; charset=UTF-8',
                     'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                    'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+                    'Pragma' => 'no-cache',
                 ];
 
                 $callback = function() use ($pemesanans) {
-                    $file = fopen('php://output', 'w');
-                    
+                    $output = fopen('php://output', 'w');
+                    // Tulis BOM agar Excel mendeteksi UTF-8
+                    fwrite($output, "\xEF\xBB\xBF");
+
                     // Header row
-                    fputcsv($file, [
+                    fputcsv($output, [
                         'No',
                         'Nomor Pesanan',
                         'Tanggal',
@@ -387,19 +374,25 @@ class PemesananController extends Controller
 
                     // Data rows
                     foreach ($pemesanans as $index => $order) {
-                        fputcsv($file, [
+                        $nomor = '="' . ($order->nomor_pesanan ?? '-') . '"';
+                        $tanggal = '="' . (optional($order->created_at)->format('d-m-Y H:i') ?? '-') . '"';
+                        $telepon = $order->telepon ? ('="' . $order->telepon . '"') : '-';
+                        $hargaSatuan = 'Rp ' . number_format((float)($order->harga_satuan ?? 0), 0, ',', '.');
+                        $totalHarga = 'Rp ' . number_format((float)($order->total_harga ?? 0), 0, ',', '.');
+
+                        fputcsv($output, [
                             $index + 1,
-                            $order->nomor_pesanan,
-                            $order->created_at ? $order->created_at->format('d/m/Y H:i') : '-',
-                            $order->nama_pemesan,
-                            $order->email,
-                            $order->telepon ?? '-',
+                            $nomor,
+                            $tanggal,
+                            $order->nama_pemesan ?? '-',
+                            $order->email ?? '-',
+                            $telepon,
                             $order->alamat_pengiriman ?? '-',
-                            $order->nama_produk ?? 'Produk #' . $order->produk_id,
-                            $order->jumlah,
-                            $order->harga_satuan,
-                            $order->total_harga,
-                            ucfirst($order->status),
+                            $order->nama_produk ?? ('Produk #' . $order->produk_id),
+                            (int)($order->jumlah ?? 0),
+                            $hargaSatuan,
+                            $totalHarga,
+                            ucfirst($order->status ?? 'pending'),
                             $order->payment_method_name ?? '-',
                             $order->payment_channel_name ?? '-',
                             ucfirst($order->payment_status ?? 'unpaid'),
@@ -407,7 +400,7 @@ class PemesananController extends Controller
                         ]);
                     }
 
-                    fclose($file);
+                    fclose($output);
                 };
 
                 return response()->stream($callback, 200, $headers);

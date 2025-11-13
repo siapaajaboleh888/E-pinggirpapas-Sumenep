@@ -56,8 +56,8 @@
                     <div class="block-23 mb-3">
                         <ul>
                             <li><span class="icon fa fa-map-marker"></span><span class="text">Desa Pinggirpapas, Kecamatan Kalianget, Kabupaten Sumenep, Jawa Timur, Indonesia</span></li>
-                            <li><a href="tel:+6281234567890"><span class="icon fa fa-phone"></span><span class="text">+62 812-3456-7890</span></a></li>
-                            <li><a href="mailto:info@epinggirpapas.id"><span class="icon fa fa-paper-plane"></span><span class="text">info@epinggirpapas.id</span></a></li>
+                            <li><a href="tel:+6285334159328"><span class="icon fa fa-phone"></span><span class="text">+62 85334159328</span></a></li>
+                            <li><a href="mailto:kosabangsa25@gmail.com"><span class="icon fa fa-paper-plane"></span><span class="text">kosabangsa25@gmail.com</span></a></li>
                             <li><span class="icon fa fa-clock-o"></span><span class="text">Senin - Sabtu: 08.00 - 17.00 WIB</span></li>
                         </ul>
                     </div>

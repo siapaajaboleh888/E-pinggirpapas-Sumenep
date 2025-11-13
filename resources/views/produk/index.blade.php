@@ -368,7 +368,7 @@
     <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 E-Pinggirpapas-Sumenep | Petambak Garam KUGAR</p>
+            <p class="mb-0">&copy; <script>document.write(new Date().getFullYear());</script> E-Pinggirpapas-Sumenep | Petambak Garam KUGAR</p>
             <p class="mb-0 small">Program Kosabangsa - Blue Economy & GFK Initiative</p>
             <div class="mt-3">
                 <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>

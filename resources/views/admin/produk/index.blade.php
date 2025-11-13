@@ -33,7 +33,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home me-1"></i>Beranda</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i>{{ Auth::user()->name }}
+                            <i class="fas fa-user-circle me-1"></i>{{ auth()->user()->name ?? 'Admin' }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('admin.pemesanan.index') }}"><i class="fas fa-shopping-cart me-2"></i>Kelola Pesanan</a></li>
@@ -84,22 +84,18 @@
                 @foreach($produks as $produk)
                 <div class="col-md-4">
                     <div class="product-card">
-                        @if($produk->gambar)
-                            <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama }}" class="product-image">
-                        @else
-                            <div class="no-image"><i class="fas fa-box-open"></i></div>
-                        @endif
+                        <img src="{{ $produk->image_url }}" alt="{{ $produk->nama }}" class="product-image">
                         
                         <div class="p-3">
                             <h5 class="fw-bold mb-2">{{ $produk->nama }}</h5>
-                            <p class="text-muted small mb-2">{{ Str::limit($produk->deskripsi ?? '-', 80) }}</p>
+                            <p class="text-muted small mb-2">{{ \Illuminate\Support\Str::limit($produk->deskripsi ?? '-', 80) }}</p>
                             <h4 class="text-primary fw-bold mb-3">Rp {{ number_format($produk->harga ?? 0, 0, ',', '.') }}</h4>
                             
                             <div class="d-flex gap-2">
-                                <a href="{{ route('admin.produk.edit', $produk->id) }}" class="btn btn-warning btn-sm flex-fill">
+                                <a href="{{ route('admin.produk.edit', $produk) }}" class="btn btn-warning btn-sm flex-fill">
                                     <i class="fas fa-edit me-1"></i>Edit
                                 </a>
-                                <form action="{{ route('admin.produk.destroy', $produk->id) }}" method="POST" style="flex: 1;">
+                                <form action="{{ route('admin.produk.destroy', $produk) }}" method="POST" style="flex: 1;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Yakin hapus produk ini?')">

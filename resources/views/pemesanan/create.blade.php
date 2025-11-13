@@ -356,14 +356,14 @@
                                             <option value="">-- Pilih Produk --</option>
                                             @if(isset($produks) && $produks->count() > 0)
                                                 @foreach($produks as $produk)
-                                                <option value="{{ $produk->id }}" data-price="{{ $produk->harga ?? 0 }}">
-                                                    {{ $produk->nama }} - Rp {{ number_format($produk->harga ?? 0, 0, ',', '.') }}/kg
+                                                <option value="{{ $produk->id }}" data-price="{{ $produk->harga ?? 0 }}" data-satuan="{{ $produk->satuan ?? 'unit' }}">
+                                                    {{ $produk->nama }} - Rp {{ number_format($produk->harga ?? 0, 0, ',', '.') }}/{{ $produk->satuan ?? 'unit' }}
                                                 </option>
                                                 @endforeach
                                             @else
-                                                <option value="1" data-price="15000">Garam Konsumsi Premium - Rp 15.000/kg</option>
-                                                <option value="2" data-price="25000">Garam Fortifikasi Kelor (GFK) - Rp 25.000/kg</option>
-                                                <option value="3" data-price="8000">Garam Industri - Rp 8.000/kg</option>
+                                                <option value="1" data-price="15000" data-satuan="unit">Garam Konsumsi Premium - Rp 15.000/unit</option>
+                                                <option value="2" data-price="25000" data-satuan="unit">Garam Fortifikasi Kelor (GFK) - Rp 25.000/unit</option>
+                                                <option value="3" data-price="8000" data-satuan="kg">Garam Industri - Rp 8.000/kg</option>
                                             @endif
                                         </select>
                                         @error('produk_id')
@@ -372,7 +372,7 @@
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Jumlah (kg) *</label>
+                                        <label class="form-label fw-semibold">Jumlah (<span id="satuanLabel">unit</span>) *</label>
                                         <input type="number" name="jumlah" class="form-control @error('jumlah') is-invalid @enderror" 
                                                value="{{ old('jumlah', 1) }}" min="1" required id="jumlahInput">
                                         @error('jumlah')
@@ -616,21 +616,28 @@
         const hargaSatuanHidden = document.getElementById('hargaSatuanHidden');
         const totalHarga = document.getElementById('totalHarga');
         const totalHargaHidden = document.getElementById('totalHargaHidden');
+        const satuanLabel = document.getElementById('satuanLabel');
         
         function hitungTotal() {
             const selectedOption = produkSelect.options[produkSelect.selectedIndex];
-            const price = parseInt(selectedOption.dataset.price || 0);
+            const price = parseInt(selectedOption?.dataset.price || 0);
+            const satuan = selectedOption?.dataset.satuan || 'unit';
             const qty = parseInt(jumlahInput.value || 0);
             const total = price * qty;
             
-            hargaSatuan.value = 'Rp ' + price.toLocaleString('id-ID');
+            hargaSatuan.value = 'Rp ' + price.toLocaleString('id-ID') + ' / ' + satuan;
             hargaSatuanHidden.value = price;
             totalHarga.textContent = 'Rp ' + total.toLocaleString('id-ID');
             totalHargaHidden.value = total;
+            if (satuanLabel) {
+                satuanLabel.textContent = satuan;
+            }
         }
         
         produkSelect.addEventListener('change', hitungTotal);
         jumlahInput.addEventListener('input', hitungTotal);
+        // initialize values on load
+        document.addEventListener('DOMContentLoaded', hitungTotal);
         
         // Payment method handling
         const paymentMethodInput = document.getElementById('payment_method');
@@ -676,7 +683,7 @@
             
             if (jumlah < 1) {
                 e.preventDefault();
-                alert('Jumlah minimal 1 kg!');
+                alert('Jumlah minimal 1!');
                 jumlahInput.focus();
                 return false;
             }

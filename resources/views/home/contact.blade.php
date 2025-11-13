@@ -30,7 +30,7 @@
        <span class="fa fa-phone"></span>
      </div>
      <h3 class="mb-2">Contact Number</h3>
-     <p><a href="tel://1234567920">+ 1235 2355 98</a></p>
+     <p><a href="tel:+6285334159328">+62 85334159328</a></p>
    </div>
  </div>
  <div class="col-md-3 d-flex">
@@ -39,7 +39,7 @@
      <span class="fa fa-paper-plane"></span>
    </div>
    <h3 class="mb-2">Email Address</h3>
-   <p><a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
+   <p><a href="mailto:kosabangsa25@gmail.com">kosabangsa25@gmail.com</a></p>
  </div>
 </div>
 <div class="col-md-3 d-flex">

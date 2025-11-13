@@ -18,8 +18,22 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        // Optional: allow success message via query string
+        if ($request->filled('success')) {
+            session()->flash('success', $request->query('success'));
+        }
+
+        if ($request->filled('warning')) {
+            session()->flash('warning', $request->query('warning'));
+        }
+
+        // If we have a persisted post-register success message, surface it
+        if (!session()->has('success') && session()->has('post_register_success')) {
+            session()->flash('success', session('post_register_success'));
+        }
+
         return view('auth.login');
     }
 
