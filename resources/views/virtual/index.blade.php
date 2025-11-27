@@ -238,7 +238,7 @@
                 <div class="col-lg-4 col-md-6">
                     <a href="{{ route('virtual.show', $tour->id) }}" class="text-decoration-none">
                         <div class="vr-card">
-                            <img src="{{ $tour->thumbnail ?? asset('assets/images/virtual-tour.jpg') }}" 
+                            <img src="{{ $tour->thumbnail_url }}" 
                                  alt="{{ $tour->title }}" 
                                  class="vr-img">
                             

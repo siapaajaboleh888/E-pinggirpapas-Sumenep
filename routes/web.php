@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Admin\AdminProdukController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminVirtualTourController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\ProdukController;  // ✅ TAMBAHKAN INI
 use App\Http\Controllers\ProfileController; // ✅ BREEZE: Profile Controller
+use App\Http\Controllers\VirtualTourController;
 use App\Models\Category;
 use App\Models\Pemesanan;
 use App\Models\Kuliner;    // ✅ GANTI dari Produk ke Kuliner
@@ -232,6 +234,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('produk', AdminProdukController::class)->except(['show']);
 
     // ===========================
+    // VIRTUAL TOUR MANAGEMENT
+    // ===========================
+    Route::resource('virtual', AdminVirtualTourController::class)->except(['show']);
+
+    // ===========================
     // USER MANAGEMENT
     // ===========================
     Route::resource('users', AdminUserController::class)->only(['index','destroy'])->names('users');
@@ -244,24 +251,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // ===========================
 
 Route::prefix('virtual-tour')->name('virtual.')->group(function () {
-    Route::get('/', function () {
-        try {
-            $virtualTours = Virtual::orderBy('created_at', 'desc')->paginate(12);
-        } catch (\Exception $e) {
-            $virtualTours = collect();
-        }
-        return view('virtual.index', compact('virtualTours'));
-    })->name('index');
-
-    Route::get('/{id}', function ($id) {
-        try {
-            $virtualTour = Virtual::findOrFail($id);
-            $relatedTours = Virtual::where('id', '!=', $id)->take(3)->get();
-        } catch (\Exception $e) {
-            abort(404, 'Virtual tour tidak ditemukan');
-        }
-        return view('virtual.show', compact('virtualTour', 'relatedTours'));
-    })->name('show');
+    Route::get('/', [VirtualTourController::class, 'index'])->name('index');
+    Route::get('/{id}', [VirtualTourController::class, 'show'])->name('show');
 });
 
 // ===========================

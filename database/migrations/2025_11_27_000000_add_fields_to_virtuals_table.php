@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('virtuals', function (Blueprint $table) {
+            $table->string('title')->nullable()->after('id');
+            $table->text('description')->nullable()->after('title');
+            $table->string('thumbnail')->nullable()->after('description');
+            $table->boolean('is_active')->default(true)->after('link');
+            $table->unsignedInteger('order')->default(0)->after('is_active');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('virtuals', function (Blueprint $table) {
+            $table->dropColumn(['title', 'description', 'thumbnail', 'is_active', 'order']);
+        });
+    }
+};

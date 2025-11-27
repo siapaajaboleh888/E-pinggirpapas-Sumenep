@@ -271,6 +271,13 @@
                         <small class="text-muted">Download laporan pesanan</small>
                     </a>
                 </div>
+                <div class="col-md-4">
+                    <a href="{{ route('admin.virtual.index') }}" class="quick-action">
+                        <i class="fas fa-vr-cardboard text-danger"></i>
+                        <h6 class="fw-semibold mt-2 mb-0">Kelola Virtual Tour</h6>
+                        <small class="text-muted">Tambah & atur video virtual tour</small>
+                    </a>
+                </div>
             </div>
 
             <!-- Info Card -->

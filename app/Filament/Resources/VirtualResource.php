@@ -25,9 +25,32 @@ class VirtualResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('link')
+                Forms\Components\TextInput::make('title')
+                    ->label('Judul')
                     ->required()
                     ->maxLength(255),
+
+                Forms\Components\Textarea::make('description')
+                    ->label('Deskripsi')
+                    ->rows(3),
+
+                Forms\Components\TextInput::make('link')
+                    ->label('Link YouTube / Iframe')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('thumbnail')
+                    ->label('URL Thumbnail (opsional)')
+                    ->maxLength(255),
+
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Aktif')
+                    ->default(true),
+
+                Forms\Components\TextInput::make('order')
+                    ->label('Urutan Tampil')
+                    ->numeric()
+                    ->default(0),
             ]);
     }
 
@@ -35,8 +58,22 @@ class VirtualResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Judul')
+                    ->sortable()
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('link')
-                    ->label('Virtual Tour'),
+                    ->label('Link')
+                    ->limit(30),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Aktif')
+                    ->boolean(),
+
+                Tables\Columns\TextColumn::make('order')
+                    ->label('Urutan')
+                    ->sortable(),
             ])
             ->filters([
                 //
