@@ -2,7 +2,21 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/f5a4c31544306385/public_html/kugar/
-    - /bin/cp -R * $DEPLOYPATH
+    - export SRCPATH=/home/f5a4c31544306385/kugar-git/
+    - /bin/cp -R $SRCPATH/public/* $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/app $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/bootstrap $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/config $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/database $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/lang $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/resources $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/routes $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/storage $DEPLOYPATH/
+    - /bin/cp -R $SRCPATH/vendor $DEPLOYPATH/
+    - /bin/cp $SRCPATH/.env.production.example $DEPLOYPATH/.env
+    - /bin/cp $SRCPATH/artisan $DEPLOYPATH/
+    - /bin/cp $SRCPATH/composer.json $DEPLOYPATH/
+    - /bin/cp $SRCPATH/composer.lock $DEPLOYPATH/
     - cd $DEPLOYPATH && composer install --no-dev --optimize-autoloader
     - cd $DEPLOYPATH && php artisan config:clear
     - cd $DEPLOYPATH && php artisan config:cache
