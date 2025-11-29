@@ -157,7 +157,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             ];
 
             $recentOrders = Pemesanan::latest()->take(10)->get();
+            
+            // Debug logging
+            \Log::info('Dashboard stats loaded', ['stats' => $stats, 'orders_count' => $recentOrders->count()]);
+            
         } catch (\Exception $e) {
+            \Log::error('Dashboard error: ' . $e->getMessage());
+            
             $stats = [
                 'total_pemesanan' => 0,
                 'pemesanan_pending' => 0,

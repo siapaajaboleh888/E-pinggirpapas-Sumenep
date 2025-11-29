@@ -652,7 +652,7 @@
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="virtual-tour-card">
                         {{-- ✅ CHANGED: Unsplash → petambak-garam.jpg (jika thumbnail kosong) --}}
-                        <img src="{{ $tour->thumbnail ?? asset('assets/images/petambak-garam.jpg') }}" alt="{{ $tour->title }}">
+                        <img src="{{ $tour->thumbnail_url ?? asset('assets/images/petambak-garam.jpg') }}" alt="{{ $tour->title }}">
                         <div class="virtual-tour-icon">
                             <i class="fas fa-vr-cardboard"></i>
                         </div>
@@ -662,7 +662,9 @@
                                 <p class="mb-0 small">{{ $tour->description ?? 'Virtual Tour 360°' }}</p>
                             </div>
                         </div>
-                        <a href="{{ route('virtual.show', $tour->slug ?? $tour->id) }}" class="stretched-link"></a>
+                        <a href="{{ $tour->link ?? route('virtual.show', $tour->slug ?? $tour->id) }}" 
+                           class="stretched-link" 
+                           @if(!empty($tour->link)) target="_blank" @endif></a>
                     </div>
                 </div>
                 @endforeach

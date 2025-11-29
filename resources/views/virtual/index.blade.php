@@ -236,7 +236,9 @@
             <div class="row g-4">
                 @forelse($virtualTours as $tour)
                 <div class="col-lg-4 col-md-6">
-                    <a href="{{ route('virtual.show', $tour->id) }}" class="text-decoration-none">
+                    <a href="{{ $tour->link ?? route('virtual.show', $tour->id) }}" 
+                       class="text-decoration-none" 
+                       @if(!empty($tour->link)) target="_blank" @endif>
                         <div class="vr-card">
                             <img src="{{ $tour->thumbnail_url }}" 
                                  alt="{{ $tour->title }}" 

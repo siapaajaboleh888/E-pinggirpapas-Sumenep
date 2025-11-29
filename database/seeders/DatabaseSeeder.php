@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             // ✅ HANYA PANGGIL SEEDER YANG DIPERLUKAN
             ProdukSeeder::class,
             KulinerSeeder::class,
+            WhatsappContactSeeder::class,
         ]);
 
         $this->command->info('🎉 Seeding completed successfully!');

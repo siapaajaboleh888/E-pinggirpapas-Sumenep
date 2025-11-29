@@ -127,7 +127,7 @@ class Kuliner extends Model
      */
     public function getWhatsappLinkAttribute()
     {
-        $phone = $this->nomor_hp ?? '081234567890';
+        $phone = $this->nomor_hp ?? '085334159328';
         $cleanPhone = ltrim($phone, '0');
         $message = urlencode("Halo, saya tertarik dengan {$this->nama}");
 

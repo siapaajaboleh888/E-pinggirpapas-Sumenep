@@ -417,7 +417,7 @@
     <!-- Footer -->
     <footer class="bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 E-Pinggirpapas-Sumenep | Petambak Garam KUGAR</p>
+            <p class="mb-0">&copy; 2025 E-Pinggirpapas-Sumenep | Petambak Garam KUGAR</p>
             <p class="mb-0 small">Program Kosabangsa - Blue Economy & GFK Initiative</p>
         </div>
     </footer>

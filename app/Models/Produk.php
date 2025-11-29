@@ -79,4 +79,13 @@ class Produk extends Model
         }
         return asset('assets/images/garam-default.jpg');
     }
+
+    public function getWhatsappLinkAttribute()
+    {
+        $phone = '085334159328';
+        $cleanPhone = ltrim($phone, '0');
+        $message = urlencode("Halo, saya tertarik dengan {$this->nama}");
+
+        return "https://wa.me/62{$cleanPhone}?text={$message}";
+    }
 }

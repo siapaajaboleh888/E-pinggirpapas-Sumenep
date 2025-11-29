@@ -585,6 +585,19 @@
                                     <i class="fas fa-info-circle me-1"></i>
                                     Tim kami akan menghubungi Anda untuk konfirmasi pesanan
                                 </p>
+                                
+                                <!-- WhatsApp Button -->
+                                <div class="mt-3">
+                                    <a href="https://wa.me/6285334159328?text={{ urlencode('Halo, saya ingin bertanya tentang pemesanan garam') }}" 
+                                       target="_blank" 
+                                       class="btn btn-success btn-lg px-4">
+                                        <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
+                                    </a>
+                                    <p class="text-muted small mt-2 mb-0">
+                                        <i class="fas fa-phone me-1"></i>
+                                        Butuh bantuan segera? Klik tombol di atas untuk chat langsung dengan kami
+                                    </p>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -599,7 +612,7 @@
                             <li class="mb-2">Ongkir disesuaikan dengan lokasi pengiriman</li>
                             <li class="mb-2">Pembayaran: Transfer Bank / COD (area Sumenep)</li>
                             <li class="mb-2">Pesanan diproses setelah pembayaran dikonfirmasi</li>
-                            <li class="mb-0">Customer service: <strong>+62 812-3456-7890</strong> (WhatsApp)</li>
+                            <li class="mb-0">Customer service: <strong>+62 853-3415-9328</strong> (WhatsApp)</li>
                         </ul>
                     </div>
                 </div>
