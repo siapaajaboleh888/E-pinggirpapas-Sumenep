@@ -25,9 +25,6 @@ class HomeController extends Controller
         $kulinerGaram = $this->getKuliners();
         $pengurus = $this->getPengurus();
         $paketWisata = $this->getPaketWisata();
-        $virtual = $this->getVirtualTours();
-        $kuliners = $this->getKuliners();
-        $penguruses = $this->getPengurus();
         $images = $this->getImages();
 
         return view('welcome', compact(
@@ -41,9 +38,6 @@ class HomeController extends Controller
             'kulinerGaram',
             'pengurus',
             'paketWisata',
-            'virtual',
-            'kuliners',
-            'penguruses',
             'images'
         ));
     }
