@@ -16,15 +16,20 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if user is authenticated
-        if (!Auth::check()) {
-            return redirect()->route('login')
-                ->with('error', 'Silakan login terlebih dahulu');
+        // Check if user is authenticated via Sanctum
+        if (!Auth::guard('sanctum')->check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated. Silakan login terlebih dahulu.'
+            ], 401);
         }
 
         // Check if user is admin
-        if (Auth::user()->role !== 'admin') {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
+        if (Auth::guard('sanctum')->user()->role !== 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Hanya admin yang dapat mengakses endpoint ini.'
+            ], 403);
         }
 
         return $next($request);

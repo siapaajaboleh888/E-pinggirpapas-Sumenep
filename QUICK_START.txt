@@ -1,0 +1,41 @@
+🚀 QUICK START - MOBILE APP DEVELOPMENT
+
+📋 COPY INI KE AI ASSISTANT SAAT BUKA PROJECT MOBILE:
+
+---
+Saya sedang mengembangkan mobile app untuk E-Pinggirpapas-Sumenep.
+
+🎯 PROJECT INFO:
+- Backend: https://kugar.e-pinggirpapas-sumenep.com (Laravel)
+- API: https://kugar.e-pinggirpapas-sumenep.com/api
+- GitHub: https://github.com/siapaajaboleh888/E-pinggirpapas-Sumenep.git
+
+📱 TASK: Sempurnakan mobile app menjadi modern & production-ready
+
+✨ REQUIREMENTS:
+- UI/UX modern dengan Material Design 3
+- Core features: Auth, Product Catalog, Cart, Checkout, Tracking  
+- Advanced: QR Scanner, Virtual Tour, Chat Support, Reviews
+- Production ready untuk App Store
+
+🎨 DESIGN:
+- Blue/White color scheme
+- Modern typography
+- Bottom navigation
+- Smooth animations
+- Responsive design
+
+🔧 API ENDPOINTS:
+- /api/products - Product catalog
+- /api/orders - Orders
+- /api/auth - Login/Register
+- /api/users - Profile
+- /api/posts - Blog
+- /api/virtual-tours - Virtual tour
+
+📞 CONTACT: +62 85334159328 | kosabangsa25@gmail.com
+
+Tolong analisis project mobile app saya dan sempurnakan sesuai requirements di atas.
+---
+
+📁 File ini ada di: c:\Users\LENOVO\Herd\wisatalembung\PROJECT_CONTEXT.txt
