@@ -17,18 +17,43 @@ use Carbon\Carbon;
 class AdminApiController extends Controller
 {
     /**
-     * Display a listing of users.
+     * Display a listing of users with search & filter.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::select('id', 'name', 'email', 'created_at', 'role')
-                    ->where('role', '!=', 'admin') // Jangan tampilkan admin lain
-                    ->latest()
-                    ->paginate(10);
+        $perPage = (int) $request->get('per_page', 10);
+        $search = $request->get('search');
+        $role = $request->get('role'); // Filter by role
+        
+        $query = User::select('id', 'name', 'email', 'phone', 'created_at', 'role');
+        
+        // Search functionality
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('phone', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        // Filter by role
+        if ($role && in_array($role, ['user', 'admin', 'staff'])) {
+            $query->where('role', $role);
+        } else {
+            // Default: don't show admin users (unless specifically requested)
+            $query->where('role', '!=', 'admin');
+        }
+        
+        $users = $query->latest()->paginate($perPage);
                     
         return response()->json([
             'success' => true,
-            'data' => $users
+            'message' => 'Users retrieved successfully',
+            'data' => $users->items(),
+            'current_page' => $users->currentPage(),
+            'last_page' => $users->lastPage(),
+            'per_page' => $users->perPage(),
+            'total' => $users->total()
         ]);
     }
 
@@ -192,53 +217,142 @@ class AdminApiController extends Controller
      */
     public function statistics()
     {
-        $totalOrders = Pesanan::count();
-        $pendingOrders = Pesanan::where('status', 'menunggu')->count();
-        $completedOrders = Pesanan::where('status', 'selesai')->count();
-        $totalProducts = Produk::count();
-        $totalVirtualTours = VirtualTour::count();
-        $totalUsers = User::where('role', 'user')->count();
-        
-        // Pendapatan bulan ini
-        $revenueThisMonth = Pesanan::where('status', 'selesai')
-                                  ->whereMonth('created_at', now()->month)
-                                  ->sum('total_harga');
-        
-        // Data untuk chart
-        $monthlyRevenue = Pesanan::select(
-                DB::raw('YEAR(created_at) as year'),
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(total_harga) as total')
-            )
-            ->where('status', 'selesai')
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
-            ->get();
-        
-        // Format data untuk chart
-        $chartData = $monthlyRevenue->map(function($item) {
-            $monthName = date('M Y', mktime(0, 0, 0, $item->month, 1, $item->year));
-            return [
-                'month' => $monthName,
-                'total' => (float) $item->total
+        try {
+            // Total counts
+            $totalUsers = User::where('role', 'user')->count();
+            $totalAdmins = User::where('role', 'admin')->count();
+            $totalProducts = Kuliner::count(); // Using Kuliner as product model
+            
+            // Orders statistics (if Pesanan table exists)
+            $totalOrders = 0;
+            $pendingOrders = 0;
+            $processingOrders = 0;
+            $completedOrders = 0;
+            $cancelledOrders = 0;
+            $revenueThisMonth = 0;
+            $revenueTotal = 0;
+            
+            if (class_exists('App\Models\Pesanan')) {
+                $totalOrders = Pesanan::count();
+                $pendingOrders = Pesanan::where('status', 'menunggu')->count();
+                $processingOrders = Pesanan::where('status', 'diproses')->count();
+                $completedOrders = Pesanan::where('status', 'selesai')->count();
+                $cancelledOrders = Pesanan::where('status', 'dibatalkan')->count();
+                
+                // Revenue this month
+                $revenueThisMonth = Pesanan::where('status', 'selesai')
+                                          ->whereMonth('created_at', now()->month)
+                                          ->whereYear('created_at', now()->year)
+                                          ->sum('total_harga');
+                
+                // Total revenue
+                $revenueTotal = Pesanan::where('status', 'selesai')
+                                      ->sum('total_harga');
+            }
+            
+            // Virtual Tours statistics
+            $totalVirtualTours = 0;
+            if (class_exists('App\Models\VirtualTour')) {
+                $totalVirtualTours = VirtualTour::count();
+            }
+            
+            // Monthly revenue chart (last 6 months)
+            $chartData = [];
+            if (class_exists('App\Models\Pesanan')) {
+                $monthlyRevenue = Pesanan::select(
+                        DB::raw('YEAR(created_at) as year'),
+                        DB::raw('MONTH(created_at) as month'),
+                        DB::raw('SUM(total_harga) as total'),
+                        DB::raw('COUNT(*) as count')
+                    )
+                    ->where('status', 'selesai')
+                    ->where('created_at', '>=', now()->subMonths(6))
+                    ->groupBy('year', 'month')
+                    ->orderBy('year', 'asc')
+                    ->orderBy('month', 'asc')
+                    ->get();
+                
+                $chartData = $monthlyRevenue->map(function($item) {
+                    $monthName = date('M Y', mktime(0, 0, 0, $item->month, 1, $item->year));
+                    return [
+                        'month' => $monthName,
+                        'revenue' => (float) $item->total,
+                        'orders' => (int) $item->count
+                    ];
+                })->values();
+            }
+            
+            // Recent users (last 5)
+            $recentUsers = User::where('role', 'user')
+                               ->latest()
+                               ->take(5)
+                               ->select('id', 'name', 'email', 'created_at')
+                               ->get();
+            
+            // Recent products (last 5)
+            $recentProducts = Kuliner::latest()
+                                     ->take(5)
+                                     ->select('id', 'title as nama', 'price as harga', 'created_at')
+                                     ->get();
+            
+            // Product statistics
+            $productStats = [
+                'total' => $totalProducts,
+                'average_price' => Kuliner::avg('price') ?? 0,
+                'min_price' => Kuliner::min('price') ?? 0,
+                'max_price' => Kuliner::max('price') ?? 0,
             ];
-        });
-        
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'total_orders' => $totalOrders,
-                'pending_orders' => $pendingOrders,
-                'completed_orders' => $completedOrders,
-                'total_products' => $totalProducts,
-                'total_virtual_tours' => $totalVirtualTours,
-                'total_users' => $totalUsers,
-                'revenue_this_month' => $revenueThisMonth,
-                'revenue_chart' => $chartData
-            ]
-        ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Dashboard statistics retrieved successfully',
+                'data' => [
+                    // User statistics
+                    'users' => [
+                        'total' => $totalUsers,
+                        'admins' => $totalAdmins,
+                        'recent' => $recentUsers
+                    ],
+                    
+                    // Product statistics
+                    'products' => array_merge($productStats, [
+                        'recent' => $recentProducts
+                    ]),
+                    
+                    // Order statistics
+                    'orders' => [
+                        'total' => $totalOrders,
+                        'pending' => $pendingOrders,
+                        'processing' => $processingOrders,
+                        'completed' => $completedOrders,
+                        'cancelled' => $cancelledOrders
+                    ],
+                    
+                    // Revenue statistics
+                    'revenue' => [
+                        'this_month' => (float) $revenueThisMonth,
+                        'total' => (float) $revenueTotal,
+                        'formatted_this_month' => 'Rp ' . number_format($revenueThisMonth, 0, ',', '.'),
+                        'formatted_total' => 'Rp ' . number_format($revenueTotal, 0, ',', '.'),
+                    ],
+                    
+                    // Virtual tours
+                    'virtual_tours' => [
+                        'total' => $totalVirtualTours
+                    ],
+                    
+                    // Chart data
+                    'charts' => [
+                        'monthly_revenue' => $chartData
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get statistics: ' . $e->getMessage()
+            ], 500);
+        }
     }
     
     /**
