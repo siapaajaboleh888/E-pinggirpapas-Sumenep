@@ -23,11 +23,6 @@ Route::get('/storage-link', function () {
     return 'Storage linked successfully.';
 });
 
-// PAKSA CLEAR CACHE (Hapus bagian ini setelah berhasil)
-try {
-    Artisan::call('optimize:clear');
-} catch (\Exception $e) {}
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes - e-Business Petambak Garam KUGAR
