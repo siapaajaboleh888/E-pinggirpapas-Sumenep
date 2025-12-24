@@ -20,6 +20,7 @@ class Kuliner extends Model
         'alamat',
         'nomor_hp',
         'published_at',
+        'satuan',
         'user_id',
     ];
 
@@ -66,7 +67,7 @@ class Kuliner extends Model
      */
     public function getSatuanAttribute()
     {
-        return '500 gram';
+        return $this->attributes['satuan'] ?? '500 gram';
     }
 
     /**

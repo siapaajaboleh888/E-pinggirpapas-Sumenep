@@ -172,6 +172,7 @@ class AdminProdukController extends Controller
             'title' => $produk->nama,
             'text' => $produk->deskripsi ?? 'Garam berkualitas dari petambak lokal',
             'price' => (int) ($produk->harga ?? 0),
+            'satuan' => $produk->satuan ?? '500 gram',
             'published_at' => now(),
         ];
 

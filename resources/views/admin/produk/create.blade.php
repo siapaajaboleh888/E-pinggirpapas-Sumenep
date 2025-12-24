@@ -80,18 +80,51 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
-                                    <select name="satuan" id="satuan" class="form-select @error('satuan') is-invalid @enderror" required>
-                                        @php $val = old('satuan', 'kg'); $ops = ['kg'=>'kg','500 gram'=>'500 gram','unit'=>'unit']; @endphp
-                                        @if(!array_key_exists($val, $ops))
-                                            <option value="{{ $val }}" selected>{{ $val }}</option>
-                                        @endif
-                                        <option value="kg" {{ $val==='kg' ? 'selected' : '' }}>kg</option>
-                                        <option value="500 gram" {{ $val==='500 gram' ? 'selected' : '' }}>500 gram</option>
-                                        <option value="unit" {{ $val==='unit' ? 'selected' : '' }}>unit</option>
-                                    </select>
+                                    <label for="satuan_select" class="form-label">Satuan <span class="text-danger">*</span></label>
+                                    <div id="satuan_container">
+                                        <select id="satuan_select" class="form-select @error('satuan') is-invalid @enderror" onchange="handleSatuanChange(this.value)">
+                                            @php 
+                                                $val = old('satuan', 'kg'); 
+                                                $presets = ['kg', '500 gram', '250 gram', 'unit'];
+                                                $isCustom = !in_array($val, $presets) && !empty($val);
+                                            @endphp
+                                            <option value="kg" {{ $val === 'kg' ? 'selected' : '' }}>kg</option>
+                                            <option value="500 gram" {{ $val === '500 gram' ? 'selected' : '' }}>500 gram</option>
+                                            <option value="250 gram" {{ $val === '250 gram' ? 'selected' : '' }}>250 gram</option>
+                                            <option value="unit" {{ $val === 'unit' ? 'selected' : '' }}>unit</option>
+                                            <option value="custom" {{ $isCustom ? 'selected' : '' }}>— Input Manual —</option>
+                                        </select>
+                                        <input type="text" name="satuan" id="satuan_custom" 
+                                               class="form-control mt-2 {{ $isCustom ? '' : 'd-none' }}" 
+                                               placeholder="Contoh: 100 gram" 
+                                               value="{{ $val }}" 
+                                               {{ $isCustom ? '' : 'disabled' }}>
+                                    </div>
+                                    <script>
+                                        function handleSatuanChange(value) {
+                                            const customInput = document.getElementById('satuan_custom');
+                                            if (value === 'custom') {
+                                                customInput.classList.remove('d-none');
+                                                customInput.disabled = false;
+                                                customInput.value = '';
+                                                customInput.focus();
+                                            } else {
+                                                customInput.classList.add('d-none');
+                                                customInput.disabled = false; // Enable so it can be sent
+                                                customInput.value = value;
+                                            }
+                                        }
+                                        
+                                        // Initialize on load just in case
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const select = document.getElementById('satuan_select');
+                                            if (select.value !== 'custom') {
+                                                document.getElementById('satuan_custom').value = select.value;
+                                            }
+                                        });
+                                    </script>
                                     @error('satuan')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
