@@ -245,33 +245,6 @@
         </div>
     </section>
 
-    <!-- Produk GFK -->
-    @if(isset($produkGFK) && $produkGFK->count() > 0)
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center display-6 fw-bold mb-5">Produk GFK Tersedia</h2>
-            <div class="row g-4">
-                @foreach($produkGFK as $produk)
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{{ $produk->image ?? asset('assets/images/garam-kelor.jpg') }}" 
-                             class="card-img-top" 
-                             style="height: 250px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $produk->name }}</h5>
-                            <p class="text-muted">{{ Str::limit($produk->description ?? '', 100) }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fs-4 fw-bold text-success">Rp {{ number_format($produk->price ?? 0, 0, ',', '.') }}</span>
-                                <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-primary">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    @endif
 
     <!-- CTA -->
     <section class="py-5 bg-success text-white">

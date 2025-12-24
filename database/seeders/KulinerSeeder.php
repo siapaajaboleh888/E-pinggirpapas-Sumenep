@@ -12,8 +12,10 @@ class KulinerSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        // ✅ Hapus data lama dulu
+        // ✅ Hapus data lama dengan aman (menghindari error foreign key)
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         DB::table('kuliners')->truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
         // ✅ Insert 4 produk garam baru sesuai katalog
         DB::table('kuliners')->insert([

@@ -569,13 +569,13 @@
                 @forelse($produkUnggulan ?? [] as $produk)
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="product-card">
-                        <img src="{{ $produk->image ?? asset('assets/images/garam-konsumsi.jpg') }}" alt="{{ $produk->name }}" class="product-image">
+                        <img src="{{ $produk->image_url }}" alt="{{ $produk->nama }}" class="product-image">
                         <div class="product-body">
-                            <h3 class="product-title">{{ $produk->name }}</h3>
-                            <p class="text-muted">{{ Str::limit($produk->description ?? 'Garam berkualitas premium', 100) }}</p>
+                            <h3 class="product-title">{{ $produk->nama }}</h3>
+                            <p class="text-muted">{{ Str::limit($produk->deskripsi, 100) }}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="product-price">Rp {{ number_format($produk->price ?? 0, 0, ',', '.') }}</span>
-                                <a href="{{ route('produk.show', $produk->slug ?? $produk->id) }}" class="btn btn-primary-custom btn-sm">
+                                <span class="product-price">Rp {{ number_format($produk->price, 0, ',', '.') }}</span>
+                                <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-primary-custom btn-sm">
                                     Detail <i class="fas fa-arrow-right ms-2"></i>
                                 </a>
                             </div>
