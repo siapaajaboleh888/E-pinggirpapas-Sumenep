@@ -48,13 +48,6 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 
-// PAKSA CLEAR CACHE VIA INDEX
-if (request()->has('force-clear')) {
-    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-    echo "Cache Cleared Sucessfully!";
-    exit;
-}
-
 $response = $kernel->handle(
     $request = Request::capture()
 )->send();
