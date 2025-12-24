@@ -15,70 +15,62 @@ class KulinerSeeder extends Seeder
         // ✅ Hapus data lama dulu
         DB::table('kuliners')->truncate();
 
-        // ✅ Insert 5 produk garam ke tabel kuliners dengan nomor_hp dan user_id
+        // ✅ Insert 4 produk garam baru sesuai katalog
         DB::table('kuliners')->insert([
             [
-                'image' => 'garam-konsumsi.jpg',
-                'title' => 'Garam Konsumsi Premium',
-                'alamat' => 'Pinggir Papas, Sumenep',
+                'title' => 'Garam Fortifikasi Kelor (Produk Unggulan)',
+                'text' => 'Garam konsumsi kualitas super (NaCl >95%) yang diperkaya dengan ekstrak daun kelor pilihan melalui teknologi fortifikasi berbasis paten.',
                 'price' => 15000,
-                'text' => 'Garam murni berkualitas tinggi untuk konsumsi sehari-hari. Telah tersertifikasi SNI dan aman dikonsumsi.',
-                'nomor_hp' => '081234567890',
-                'user_id' => 1,  // ✅ TAMBAHKAN user_id
+                'satuan' => '250 gram',
+                'image' => 'garam_fortifikasi_kelor.png',
+                'alamat' => 'Pinggir Papas, Sumenep',
+                'nomor_hp' => '087846297731',
+                'user_id' => 1,
                 'published_at' => $now,
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'image' => 'garam-gfk.jpg',
-                'title' => 'Garam Fortifikasi Kelor (GFK)',
-                'alamat' => 'Pinggir Papas, Sumenep',
+                'title' => 'Lulur Garam Kelor (Premium Body Scrub)',
+                'text' => 'Perpaduan kristal garam murni hasil teknologi tunnel dengan bubuk kelor halus untuk eksfoliasi kulit secara alami. Manfaat: Mengangkat sel kulit mati, mencerahkan kulit, dan sebagai antioksidan alami.',
                 'price' => 25000,
-                'text' => 'Garam diperkaya dengan nutrisi daun kelor. Kaya akan vitamin A, zat besi, dan kalsium untuk kesehatan keluarga.',
-                'nomor_hp' => '081234567890',
-                'user_id' => 1,  // ✅ TAMBAHKAN user_id
+                'satuan' => '250 gram',
+                'image' => 'lulur_garam_kelor.png',
+                'alamat' => 'Pinggir Papas, Sumenep',
+                'nomor_hp' => '087846297731',
+                'user_id' => 1,
                 'published_at' => $now,
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'image' => 'garam-industri.jpg',
-                'title' => 'Garam Industri',
-                'alamat' => 'Pinggir Papas, Sumenep',
-                'price' => 8000,
-                'text' => 'Garam berkualitas untuk kebutuhan industri, pabrik, dan pengolahan makanan skala besar.',
-                'nomor_hp' => '081234567890',
-                'user_id' => 1,  // ✅ TAMBAHKAN user_id
-                'published_at' => $now,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-            [
-                'image' => 'garam-spa.jpg',
-                'title' => 'Garam SPA',
-                'alamat' => 'Pinggir Papas, Sumenep',
-                'price' => 20000,
-                'text' => 'Garam khusus untuk perawatan spa dan kecantikan. Membantu relaksasi dan melembutkan kulit.',
-                'nomor_hp' => '081234567890',
-                'user_id' => 1,  // ✅ TAMBAHKAN user_id
-                'published_at' => $now,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-            [
-                'image' => 'garam-kasar.jpg',
-                'title' => 'Garam Kasar',
-                'alamat' => 'Pinggir Papas, Sumenep',
+                'title' => 'Sabun Mandi Garam Kelor (Natural Soap)',
+                'text' => 'Sabun mandi yang mengombinasikan mineral garam dan nutrisi daun kelor. Manfaat: Membersihkan kuman secara maksimal sekaligus menjaga kelembapan kulit sensitif.',
                 'price' => 10000,
-                'text' => 'Garam dengan butiran kasar untuk kebutuhan masak tradisional dan pengawetan ikan.',
-                'nomor_hp' => '081234567890',
-                'user_id' => 1,  // ✅ TAMBAHKAN user_id
+                'satuan' => '250 gram',
+                'image' => 'sabun_garam_kelor.png',
+                'alamat' => 'Pinggir Papas, Sumenep',
+                'nomor_hp' => '087846297731',
+                'user_id' => 1,
+                'published_at' => $now,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Paket Hemat "Blue Economy"',
+                'text' => 'Cocok untuk hampers kesehatan atau stok keluarga. Isi Paket : 2 Pouch Garam Kelor + 1 Lulur + 1 Sabun.',
+                'price' => 55000,
+                'satuan' => 'Paket',
+                'image' => 'paket_hemat_blue_economy.png',
+                'alamat' => 'Pinggir Papas, Sumenep',
+                'nomor_hp' => '087846297731',
+                'user_id' => 1,
                 'published_at' => $now,
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
         ]);
 
-        $this->command->info('✅ 5 Produk Garam berhasil ditambahkan ke tabel kuliners!');
+        $this->command->info('✅ 4 Produk Garam baru berhasil ditambahkan!');
     }
 }

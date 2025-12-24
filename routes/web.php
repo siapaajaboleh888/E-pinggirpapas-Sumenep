@@ -432,6 +432,19 @@ require __DIR__ . '/auth.php';
 // FALLBACK ROUTE (404)
 // ===========================
 
+
+// ===========================
+// TEMPORARY: Reset Produk (Hapus setelah digunakan)
+// ===========================
+Route::get('/reset-produk-katalog', function() {
+    try {
+        Artisan::call('db:seed', ['--class' => 'KulinerSeeder', '--force' => true]);
+        return "✅ Produk berhasil direset sesuai katalog baru!<br><a href='/produk'>Lihat Produk</a>";
+    } catch (\Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
