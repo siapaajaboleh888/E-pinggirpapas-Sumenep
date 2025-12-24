@@ -429,6 +429,19 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin-auth')->name('ad
 require __DIR__ . '/auth.php';
 
 // ===========================
+// TEMPORARY MIGRATION ROUTE
+// ===========================
+
+Route::get('/run-migrate', function () {
+    try {
+        Artisan::call('migrate', ["--force" => true]);
+        return "Migrasi Berhasil!<br><pre>" . Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "Migrasi Gagal: " . $e->getMessage();
+    }
+});
+
+// ===========================
 // FALLBACK ROUTE (404)
 // ===========================
 
