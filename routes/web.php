@@ -23,6 +23,17 @@ Route::get('/storage-link', function () {
     return 'Storage linked successfully.';
 });
 
+Route::get('/set-semua-selesai', function () {
+    if (request('key') !== 'kosabangsa25') {
+        return 'Unauthorized';
+    }
+    DB::table('pemesanans')->update([
+        'status' => 'delivered',
+        'payment_status' => 'paid'
+    ]);
+    return 'Semua pesanan (273 data) berhasil diubah menjadi Selesai dan Lunas!';
+});
+
 Route::get('/update-transaction-dates', function () {
     if (request('key') !== 'kosabangsa25') {
         return 'Unauthorized';
