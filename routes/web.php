@@ -23,6 +23,175 @@ Route::get('/storage-link', function () {
     return 'Storage linked successfully.';
 });
 
+Route::get('/update-transaction-dates', function () {
+    if (request('key') !== 'kosabangsa25') {
+        return 'Unauthorized';
+    }
+
+    try {
+        DB::beginTransaction();
+
+        // Helper to generate realistic date-time between 07:30 and 21:00
+        $getRandomDateTime = function($year, $month) {
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+            $day = rand(1, $daysInMonth);
+            $hour = rand(7, 21);
+            if ($hour == 7) {
+                $minute = rand(30, 59);
+            } elseif ($hour == 21) {
+                $minute = 0;
+            } else {
+                $minute = rand(0, 59);
+            }
+            $second = rand(0, 59);
+            return sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $minute, $second);
+        };
+
+        // 1. Fetch new transactions (ID > 20)
+        $newOrders = Pemesanan::where('id', '>', 20)->orderBy('id', 'asc')->get();
+        $totalNew = $newOrders->count();
+
+        // We want: Dec 2025 (15), Jan 2026 (30), Feb 2026 (45), Mar 2026 (55), Apr 2026 (47), May 2026 (63)
+        $distribution = [
+            ['year' => 2025, 'month' => 12, 'count' => 15],
+            ['year' => 2026, 'month' => 1,  'count' => 30],
+            ['year' => 2026, 'month' => 2,  'count' => 45],
+            ['year' => 2026, 'month' => 3,  'count' => 55],
+            ['year' => 2026, 'month' => 4,  'count' => 47],
+            ['year' => 2026, 'month' => 5,  'count' => 63],
+        ];
+
+        $orderIndex = 0;
+        foreach ($distribution as $dist) {
+            $year = $dist['year'];
+            $month = $dist['month'];
+            $count = $dist['count'];
+
+            for ($i = 0; $i < $count; $i++) {
+                if ($orderIndex >= $totalNew) {
+                    break;
+                }
+                $order = $newOrders[$orderIndex];
+                $newDateStr = $getRandomDateTime($year, $month);
+                
+                $dtObj = new DateTime($newDateStr);
+                $dateStrForCode = $dtObj->format('Ymd');
+                
+                $oldNo = $order->nomor_pesanan;
+                $newNo = $oldNo;
+                $parts = explode('-', $oldNo);
+                if (count($parts) === 3) {
+                    $parts[1] = $dateStrForCode;
+                    $newNo = implode('-', $parts);
+                }
+
+                $order->nomor_pesanan = $newNo;
+                $order->created_at = $newDateStr;
+                $order->updated_at = $newDateStr;
+                $order->save();
+                $orderIndex++;
+            }
+        }
+
+        // 2. Fetch original transactions (ID <= 20) and update to June 2026
+        $origOrders = Pemesanan::where('id', '<=', 20)->get();
+        foreach ($origOrders as $order) {
+            $newDateStr = $getRandomDateTime(2026, 6);
+            $dtObj = new DateTime($newDateStr);
+            $dateStrForCode = $dtObj->format('Ymd');
+
+            $oldNo = $order->nomor_pesanan;
+            $newNo = $oldNo;
+            $parts = explode('-', $oldNo);
+            if (count($parts) === 3) {
+                $parts[1] = $dateStrForCode;
+                $newNo = implode('-', $parts);
+            }
+
+            $order->nomor_pesanan = $newNo;
+            $order->created_at = $newDateStr;
+            $order->updated_at = $newDateStr;
+            $order->save();
+        }
+
+        // 3. Ensure we have exactly 25 transactions in June 2026
+        $juneCount = Pemesanan::whereYear('created_at', 2026)->whereMonth('created_at', 6)->count();
+        $needed = 25 - $juneCount;
+
+        if ($needed > 0) {
+            $names = ["Ahmad Santoso", "Budi Wijaya", "Siti Rahayu", "Dewi Lestari", "Agus Setiawan", "Eko Prasetyo", "Yuni Anggraini", "Rudi Hermawan", "Hasan Basri", "Sri Wahyuni", "Dian Pratama", "Rina Lestari", "Tuti Handayani", "Bambang Mulyono"];
+            $products = [
+                1 => 'Garam Fortifikasi Kelor',
+                2 => 'Lulur Garam Kelor',
+                3 => 'Sabun Mandi Garam Kelor',
+                4 => 'Paket Hemat Blue Economy'
+            ];
+            $prices = [1 => 15000, 2 => 25000, 3 => 10000, 4 => 55000];
+            $payments = [
+                ['dana', 'e_wallet'], ['gopay', 'e_wallet'], ['ovo', 'e_wallet'], ['cod', 'cod'],
+                ['bca', 'bank_transfer'], ['bni', 'bank_transfer'], ['bri', 'bank_transfer']
+            ];
+
+            for ($i = 0; $i < $needed; $i++) {
+                $newDateStr = $getRandomDateTime(2026, 6);
+                $dtObj = new DateTime($newDateStr);
+                $dateStrForCode = $dtObj->format('Ymd');
+
+                $nomorPesanan = 'KGR-' . $dateStrForCode . '-' . strtoupper(\Illuminate\Support\Str::random(6));
+                $name = $names[array_rand($names)];
+                $prodId = array_rand($products);
+                $prodName = $products[$prodId];
+                $price = $prices[$prodId];
+                $qty = rand(1, 3);
+                $total = $price * $qty;
+                $pay = $payments[array_rand($payments)];
+
+                Pemesanan::create([
+                    'nomor_pesanan' => $nomorPesanan,
+                    'nama_pemesan' => $name,
+                    'email' => strtolower(str_replace(' ', '.', $name)) . rand(10, 99) . '@gmail.com',
+                    'telepon' => '08' . rand(100000000, 999999999),
+                    'alamat_pengiriman' => 'Desa Pinggirpapas, Sumenep, Jawa Timur',
+                    'produk_id' => $prodId,
+                    'nama_produk' => $prodName,
+                    'jumlah' => $qty,
+                    'harga_satuan' => $price,
+                    'total_harga' => $total,
+                    'catatan' => 'Pesanan otomatis June 2026',
+                    'status' => 'pending',
+                    'payment_method' => $pay[1],
+                    'payment_channel' => $pay[0],
+                    'payment_status' => 'unpaid',
+                    'created_at' => $newDateStr,
+                    'updated_at' => $newDateStr
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        $counts = DB::table('pemesanans')
+            ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('count(*) as total'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Transaction dates updated successfully',
+            'monthly_counts' => $counts
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes - e-Business Petambak Garam KUGAR
